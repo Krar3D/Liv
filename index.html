@@ -1,0 +1,1485 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختبار المرونة ونظرية العرض | مع الشرح المفصل (ص 8 - ص 20)</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Cairo & Tajawal -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-card: #19233c;
+            --bg-card-hover: #243252;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --accent-primary: #10b981;
+            --accent-secondary: #f59e0b;
+            --border-color: rgba(255, 255, 255, 0.09);
+            --glow: rgba(16, 185, 129, 0.22);
+        }
+
+        [data-theme="light"] {
+            --bg-primary: #f1f5f9;
+            --bg-secondary: #ffffff;
+            --bg-card: #ffffff;
+            --bg-card-hover: #f8fafc;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --accent-primary: #059669;
+            --accent-secondary: #d97706;
+            --border-color: rgba(15, 23, 42, 0.1);
+            --glow: rgba(5, 150, 105, 0.15);
+        }
+
+        [data-theme="gold"] {
+            --bg-primary: #0f0c06;
+            --bg-secondary: #1c160b;
+            --bg-card: #261e0f;
+            --bg-card-hover: #332814;
+            --text-primary: #fef3c7;
+            --text-secondary: #d4b16a;
+            --accent-primary: #f59e0b;
+            --accent-secondary: #fbbf24;
+            --border-color: rgba(245, 158, 11, 0.22);
+            --glow: rgba(245, 158, 11, 0.25);
+        }
+
+        [data-theme="cyber"] {
+            --bg-primary: #090514;
+            --bg-secondary: #140b29;
+            --bg-card: #1d1138;
+            --bg-card-hover: #27174a;
+            --text-primary: #f3e8ff;
+            --text-secondary: #a855f7;
+            --accent-primary: #06b6d4;
+            --accent-secondary: #ec4899;
+            --border-color: rgba(6, 182, 212, 0.25);
+            --glow: rgba(6, 182, 212, 0.25);
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: 'Cairo', 'Tajawal', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            transition: background-color 0.3s ease, color 0.3s ease;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .theme-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.35);
+            transition: background-color 0.25s ease, border-color 0.25s ease;
+        }
+
+        .theme-secondary {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+        }
+
+        .text-muted {
+            color: var(--text-secondary);
+        }
+
+        .accent-btn {
+            background: linear-gradient(135deg, var(--accent-primary), #047857);
+            color: #fff;
+            box-shadow: 0 4px 15px var(--glow);
+            transition: transform 0.18s cubic-bezier(0.22, 1, 0.36, 1), filter 0.18s ease;
+            will-change: transform;
+        }
+
+        [data-theme="gold"] .accent-btn {
+            background: linear-gradient(135deg, #f59e0b, #b45309);
+            color: #0f0c06;
+            font-weight: 800;
+        }
+
+        [data-theme="cyber"] .accent-btn {
+            background: linear-gradient(135deg, #06b6d4, #7c3aed);
+            color: #fff;
+        }
+
+        .accent-btn:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.07);
+        }
+
+        .accent-btn:active {
+            transform: translateY(0) scale(0.98);
+        }
+
+        .view-window {
+            display: none;
+            animation: fadeSlideIn 0.28s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        .view-window.active {
+            display: block;
+        }
+
+        @keyframes fadeSlideIn {
+            from { opacity: 0; transform: translate3d(0, 10px, 0); }
+            to { opacity: 1; transform: translate3d(0, 0, 0); }
+        }
+
+        /* Smooth Question Card Transition */
+        .q-card-Swap {
+            animation: qCardPulse 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        @keyframes qCardPulse {
+            0% { opacity: 0.45; transform: translate3d(0, 6px, 0); }
+            100% { opacity: 1; transform: translate3d(0, 0, 0); }
+        }
+
+        .option-item {
+            background-color: var(--bg-secondary);
+            border: 1.5px solid var(--border-color);
+            transition: transform 0.16s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+            position: relative;
+            overflow: hidden;
+            will-change: transform, background-color, border-color;
+            user-select: none;
+        }
+
+        .option-item:hover:not(.disabled) {
+            background-color: var(--bg-card-hover);
+            border-color: var(--accent-primary);
+            transform: translate3d(-4px, 0, 0);
+        }
+
+        .option-item:active:not(.disabled) {
+            transform: scale(0.985);
+        }
+
+        .option-item.selected {
+            border-color: var(--accent-primary);
+            background-color: rgba(16, 185, 129, 0.14);
+            box-shadow: 0 0 0 1px var(--accent-primary);
+        }
+
+        .option-item.correct {
+            border-color: #10b981 !important;
+            background-color: rgba(16, 185, 129, 0.18) !important;
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.15);
+        }
+
+        .option-item.wrong {
+            border-color: #ef4444 !important;
+            background-color: rgba(239, 68, 68, 0.16) !important;
+        }
+
+        /* Ultra-Smooth 60fps Grid Collapse (No max-height lag!) */
+        .smooth-collapse-wrapper {
+            display: grid;
+            grid-template-rows: 0fr;
+            opacity: 0;
+            transition: grid-template-rows 0.28s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.24s ease, margin-top 0.24s ease;
+            will-change: grid-template-rows, opacity;
+        }
+
+        .smooth-collapse-wrapper.open {
+            grid-template-rows: 1fr;
+            opacity: 1;
+            margin-top: 1rem;
+        }
+
+        .smooth-collapse-inner {
+            overflow: hidden;
+        }
+
+        .page-badge {
+            background: rgba(245, 158, 11, 0.15);
+            color: #fbbf24;
+            border: 1px solid rgba(245, 158, 11, 0.35);
+            font-size: 0.75rem;
+            padding: 0.15rem 0.6rem;
+            border-radius: 999px;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            white-space: nowrap;
+        }
+
+        [data-theme="light"] .page-badge {
+            background: #fef3c7;
+            color: #b45309;
+            border-color: #f59e0b;
+        }
+
+        .explanation-card {
+            background: rgba(16, 185, 129, 0.08);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        [data-theme="light"] .explanation-card {
+            background: #ecfdf5;
+            border-color: #6ee7b7;
+            color: #065f46;
+        }
+
+        .no-scrollbar::-webkit-scrollbar {
+            height: 5px;
+            width: 5px;
+        }
+        .no-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .no-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(148, 163, 184, 0.3);
+            border-radius: 999px;
+        }
+    </style>
+</head>
+<body class="pb-12">
+
+    <!-- Top Navigation Bar -->
+    <header class="sticky top-0 z-30 backdrop-blur-md bg-opacity-90 theme-secondary border-b px-2 sm:px-4 py-1.5 sm:py-2">
+        <div class="max-w-4xl mx-auto flex items-center justify-between gap-2">
+            <!-- Brand Title -->
+            <div class="flex items-center gap-2 cursor-pointer shrink-0" onclick="switchWindow('view-start')">
+                <div class="w-8 h-8 rounded-lg accent-btn flex items-center justify-center text-sm shadow-md">
+                    <i class="fa-solid fa-scale-balanced"></i>
+                </div>
+                <div class="leading-none">
+                    <h1 class="font-extrabold text-sm sm:text-base flex items-center gap-1.5">
+                        <span>المرونة ونظرية العرض</span>
+                        <span class="text-[10px] px-1.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 font-bold border border-emerald-500/30">100 سؤال + الشرح</span>
+                    </h1>
+                    <p class="text-[10px] text-muted mt-0.5 hidden sm:block">مرونة القوس والنقطة ونظرية العرض كاملة (ص 8-20) 📊</p>
+                </div>
+            </div>
+
+            <!-- Controls: Sound + Themes -->
+            <div class="flex items-center gap-1.5 shrink-0">
+                <button id="sound-btn" onclick="toggleSound()" title="تفعيل/كتم المؤثرات الصوتية" class="w-7 h-7 rounded-lg theme-card flex items-center justify-center text-xs hover:scale-105">
+                    <i id="sound-icon" class="fa-solid fa-volume-high text-emerald-400"></i>
+                </button>
+
+                <div class="flex items-center p-0.5 rounded-lg theme-card gap-0.5">
+                    <button onclick="setTheme('dark')" id="theme-dark" class="px-1.5 py-0.5 rounded text-[10px] font-bold transition-all text-muted hover:text-current" title="الوضع الليلي">
+                        <i class="fa-solid fa-moon"></i>
+                    </button>
+                    <button onclick="setTheme('light')" id="theme-light" class="px-1.5 py-0.5 rounded text-[10px] font-bold transition-all text-muted hover:text-current" title="الوضع النهاري">
+                        <i class="fa-solid fa-sun"></i>
+                    </button>
+                    <button onclick="setTheme('gold')" id="theme-gold" class="px-1.5 py-0.5 rounded text-[10px] font-bold transition-all text-muted hover:text-current" title="ثيم قاعدة الذهب">
+                        <i class="fa-solid fa-coins"></i>
+                    </button>
+                    <button onclick="setTheme('cyber')" id="theme-cyber" class="px-1.5 py-0.5 rounded text-[10px] font-bold transition-all text-muted hover:text-current" title="ثيم نيون الشورجة">
+                        <i class="fa-solid fa-bolt"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-4xl mx-auto px-4 pt-6">
+
+        <!-- WINDOW 1: START & SETUP VIEW -->
+        <section id="view-start" class="view-window active">
+            <div class="theme-card rounded-3xl p-6 sm:p-8 mb-6 relative overflow-hidden">
+                <div class="absolute -left-10 -bottom-10 opacity-5 text-9xl pointer-events-none">
+                    <i class="fa-solid fa-chart-line"></i>
+                </div>
+
+                <div class="flex flex-wrap items-center gap-2 mb-3">
+                    <span class="px-3 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30">
+                        <i class="fa-solid fa-book-open ml-1"></i> الملزمة كاملة: ص 8 إلى ص 20
+                    </span>
+                    <span class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                        <i class="fa-solid fa-bolt ml-1"></i> نسخة فائقة السلاسة (60fps) بدون قفز بالشاشة
+                    </span>
+                </div>
+
+                <h2 class="text-2xl sm:text-3xl font-black mb-3 leading-snug">
+                    يا هلا بيك باختبار <span class="text-amber-400">"المرونة ونظرية العرض"</span> 📈
+                </h2>
+                <p class="text-muted text-sm sm:text-base leading-relaxed mb-6">
+                    فرمنالك الملزمة من <strong>ص 8 إلى ص 20</strong> بـ <strong>100 سؤال MCQ</strong> تغطي كل قانون، مثال رياضي، جدول، ورسم بياني مع <strong>تلميحات عراقية</strong> و<strong>شرح مفصل لكل إجابة</strong>.
+                </p>
+
+                <!-- Quick Stats Cards -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+                    <div class="theme-secondary rounded-2xl p-3.5 text-center">
+                        <div class="text-amber-400 text-xl mb-1"><i class="fa-solid fa-list-check"></i></div>
+                        <div class="text-lg font-black">100 سؤال</div>
+                        <div class="text-xs text-muted">شامل لكل حرف ورقم</div>
+                    </div>
+                    <div class="theme-secondary rounded-2xl p-3.5 text-center">
+                        <div class="text-emerald-400 text-xl mb-1"><i class="fa-solid fa-book-open-reader"></i></div>
+                        <div class="text-lg font-black">100 شرح وافي</div>
+                        <div class="text-xs text-muted">تفسير سبب الإجابة</div>
+                    </div>
+                    <div class="theme-secondary rounded-2xl p-3.5 text-center">
+                        <div class="text-sky-400 text-xl mb-1"><i class="fa-solid fa-file-lines"></i></div>
+                        <div class="text-lg font-black">ص 8 - ص 20</div>
+                        <div class="text-xs text-muted">مرقم حسب الملزمة</div>
+                    </div>
+                    <div class="theme-secondary rounded-2xl p-3.5 text-center">
+                        <div class="text-purple-400 text-xl mb-1"><i class="fa-solid fa-crown"></i></div>
+                        <div class="text-lg font-black">5 ألقاب</div>
+                        <div class="text-xs text-muted">حسب درجتك النهائية</div>
+                    </div>
+                </div>
+
+                <!-- Quiz Configuration Options -->
+                <div class="border-t border-white/10 pt-6" id="setup-container">
+                    <h3 class="text-lg font-extrabold mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-sliders text-emerald-400"></i>
+                        <span>تضبيط الكعدة والاختبار (خياراتك):</span>
+                    </h3>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                        <label class="theme-secondary rounded-2xl p-4 flex items-center justify-between cursor-pointer hover:border-emerald-500/40 transition-all">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center text-lg">
+                                    <i class="fa-solid fa-shuffle"></i>
+                                </div>
+                                <div>
+                                    <div class="font-bold text-sm sm:text-base">خربطة ترتيب الأسئلة</div>
+                                    <div class="text-xs text-muted">حتى لا تحفظهن عالتسلسل مثل الببغاء!</div>
+                                </div>
+                            </div>
+                            <input type="checkbox" id="opt-shuffle-q" class="w-5 h-5 accent-emerald-500 rounded cursor-pointer">
+                        </label>
+
+                        <label class="theme-secondary rounded-2xl p-4 flex items-center justify-between cursor-pointer hover:border-emerald-500/40 transition-all">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-xl bg-amber-500/15 text-amber-400 flex items-center justify-center text-lg">
+                                    <i class="fa-solid fa-random"></i>
+                                </div>
+                                <div>
+                                    <div class="font-bold text-sm sm:text-base">تغيير مكان الاختيارات</div>
+                                    <div class="text-xs text-muted">نفرّ الاختيارات (أ، ب، ج، د)</div>
+                                </div>
+                            </div>
+                            <input type="checkbox" id="opt-shuffle-a" checked class="w-5 h-5 accent-emerald-500 rounded cursor-pointer">
+                        </label>
+
+                        <label class="theme-secondary rounded-2xl p-4 flex items-center justify-between cursor-pointer hover:border-emerald-500/40 transition-all">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-xl bg-sky-500/15 text-sky-400 flex items-center justify-center text-lg">
+                                    <i class="fa-solid fa-bolt-lightning"></i>
+                                </div>
+                                <div>
+                                    <div class="font-bold text-sm sm:text-base">تصحيح فوري + شرح سلس</div>
+                                    <div class="text-xs text-muted">يطلعلك الشرح بنفس المكان بدون قفز</div>
+                                </div>
+                            </div>
+                            <input type="checkbox" id="opt-instant" checked class="w-5 h-5 accent-emerald-500 rounded cursor-pointer">
+                        </label>
+
+                        <div class="theme-secondary rounded-2xl p-4 flex flex-col justify-center">
+                            <div class="flex items-center justify-between mb-1.5">
+                                <span class="font-bold text-sm flex items-center gap-1.5">
+                                    <i class="fa-solid fa-filter text-purple-400"></i>
+                                    حدد النطاق:
+                                </span>
+                            </div>
+                            <select id="opt-scope" class="w-full rounded-xl px-3 py-2 text-sm font-bold bg-black/25 border border-white/10 focus:outline-none focus:border-emerald-500">
+                                <option value="all">الكل (100 سؤال - من ص 8 إلى ص 20)</option>
+                                <option value="quick20">اختبار سريع عالطاير (20 سؤال)</option>
+                                <option value="quick50">نص المسافة (50 سؤال)</option>
+                                <option value="p8-11">مرونة القوس والنقطة والإيراد الحدي (ص 8 - ص 11)</option>
+                                <option value="p12-16">نظرية العرض وعواملها (ص 12 - ص 16)</option>
+                                <option value="p17-20">مرونة العرض والتغير في العرض (ص 17 - ص 20)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button onclick="startQuiz()" class="w-full py-4 rounded-2xl accent-btn text-lg font-black flex items-center justify-center gap-3 shadow-lg">
+                        <span>يلا نبلش الاختبار (شد حيلك يالذهب!)</span>
+                        <i class="fa-solid fa-rocket"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- WINDOW 2: QUIZ VIEW -->
+        <section id="view-quiz" class="view-window">
+            <div class="theme-card rounded-2xl p-4 mb-4">
+                <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                    <div class="flex items-center gap-2">
+                        <span class="px-3 py-1 rounded-xl bg-emerald-500/20 text-emerald-400 font-black text-sm" id="q-counter-badge"></span>
+                        <span id="q-page-badge" class="page-badge" title="رقم الصفحة في الملزمة">
+                            <i class="fa-solid fa-file-pdf"></i>
+                            <span id="q-page-text"></span>
+                        </span>
+                    </div>
+
+                    <div class="flex items-center gap-3 text-xs sm:text-sm font-bold">
+                        <span class="px-2.5 py-1 rounded-lg theme-secondary flex items-center gap-1.5 text-emerald-400" title="الإجابات الصحيحة">
+                            <i class="fa-solid fa-circle-check"></i>
+                            <span id="live-correct">0</span>
+                        </span>
+                        <span class="px-2.5 py-1 rounded-lg theme-secondary flex items-center gap-1.5 text-rose-400" title="الأخطاء/متروك">
+                            <i class="fa-solid fa-circle-xmark"></i>
+                            <span id="live-wrong">0</span>
+                        </span>
+                        <span class="px-2.5 py-1 rounded-lg theme-secondary flex items-center gap-1.5 text-amber-400" title="الوقت المنقضي">
+                            <i class="fa-regular fa-clock"></i>
+                            <span id="live-timer">00:00</span>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="w-full h-2.5 bg-black/30 rounded-full overflow-hidden mb-3">
+                    <div id="quiz-progress-bar" class="h-full bg-gradient-to-l from-emerald-400 to-teal-500 transition-all duration-300" style="width: 0%"></div>
+                </div>
+
+                <div id="q-nav-strip" class="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-1"></div>
+            </div>
+
+            <div id="question-card" class="theme-card rounded-3xl p-5 sm:p-7 mb-4">
+                <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <span class="text-xs font-extrabold uppercase tracking-wider text-muted" id="q-category-label"></span>
+                        <span id="q-inline-page" class="page-badge"></span>
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <button onclick="toggleHint()" id="hint-btn" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-amber-500/15 text-amber-400 border border-amber-500/30 hover:bg-amber-500/25 transition-all flex items-center gap-1.5 shrink-0">
+                            <i class="fa-regular fa-lightbulb"></i>
+                            <span>تلميح عالسريع</span>
+                        </button>
+                        <button onclick="revealExplanationDirectly()" id="reveal-btn" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/25 transition-all flex items-center gap-1.5 shrink-0" title="اعرف الجواب الصحيح (يُحسب كإجابة خاطئة)">
+                            <i class="fa-solid fa-book-open"></i>
+                            <span>كشف الجواب والشرح</span>
+                        </button>
+                    </div>
+                </div>
+
+                <h2 id="q-text" class="text-lg sm:text-xl font-extrabold leading-relaxed mb-4"></h2>
+
+                <!-- Smooth Hint Collapse -->
+                <div id="hint-box" class="smooth-collapse-wrapper">
+                    <div class="smooth-collapse-inner">
+                        <div class="rounded-2xl bg-amber-500/10 border border-amber-500/30 px-4 py-3 text-xs sm:text-sm text-amber-300">
+                            <div class="flex items-start gap-2.5">
+                                <i class="fa-solid fa-wand-magic-sparkles text-amber-400 mt-1 text-base"></i>
+                                <div>
+                                    <span class="font-extrabold block text-amber-400 mb-0.5">تغشيشة عراقية:</span>
+                                    <p id="hint-text" class="leading-relaxed"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Options Container -->
+                <div id="options-container" class="space-y-3 mt-5"></div>
+
+                <!-- Smooth Feedback Collapse -->
+                <div id="feedback-box" class="smooth-collapse-wrapper">
+                    <div class="smooth-collapse-inner">
+                        <div id="feedback-card-inner" class="rounded-2xl overflow-hidden theme-secondary border border-white/10">
+                            <div id="feedback-header" class="px-4 py-3 flex flex-wrap items-center justify-between gap-2 border-b border-white/10">
+                                <div class="flex items-center gap-2.5 font-extrabold text-sm sm:text-base">
+                                    <i id="feedback-icon" class="fa-solid fa-face-grin-stars text-xl"></i>
+                                    <span id="feedback-text"></span>
+                                </div>
+                                <span id="feedback-page-ref" class="page-badge"></span>
+                            </div>
+
+                            <div class="p-4 space-y-3 text-xs sm:text-sm leading-relaxed">
+                                <div class="p-3 rounded-xl bg-emerald-500/15 border border-emerald-500/35 flex items-start gap-2.5">
+                                    <i class="fa-solid fa-circle-check text-emerald-400 text-base mt-0.5 shrink-0"></i>
+                                    <div>
+                                        <span class="font-black text-emerald-400 block mb-0.5">الإجابة الصحيحة المعتمدة:</span>
+                                        <span id="feedback-correct-answer" class="font-bold"></span>
+                                    </div>
+                                </div>
+
+                                <div class="p-3.5 rounded-xl theme-secondary border border-white/10 flex items-start gap-2.5">
+                                    <i class="fa-solid fa-book-open-reader text-amber-400 text-base mt-1 shrink-0"></i>
+                                    <div>
+                                        <span id="explanation-title" class="font-black text-amber-400 block mb-1"></span>
+                                        <p id="feedback-explanation-text" class="leading-relaxed opacity-95"></p>
+                                    </div>
+                                </div>
+
+                                <!-- Quick Next Button Inside Feedback for Seamless Flow -->
+                                <div class="pt-1 flex justify-end">
+                                    <button onclick="nextQuestion()" class="px-4 py-2 rounded-xl accent-btn font-bold text-xs sm:text-sm flex items-center gap-2">
+                                        <span id="inline-next-label">السؤال التالي</span>
+                                        <i class="fa-solid fa-arrow-left"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-wrap items-center justify-between gap-3">
+                <div class="flex items-center gap-2">
+                    <button onclick="prevQuestion()" id="btn-prev" class="px-4 py-3 rounded-2xl theme-card font-bold text-sm hover:border-emerald-500/40 flex items-center gap-2 disabled:opacity-40 disabled:pointer-events-none">
+                        <i class="fa-solid fa-arrow-right"></i>
+                        <span>السابق</span>
+                    </button>
+                    <button onclick="nextQuestion()" id="btn-next" class="px-5 py-3 rounded-2xl accent-btn font-bold text-sm flex items-center gap-2">
+                        <span id="btn-next-label">التالي</span>
+                        <i class="fa-solid fa-arrow-left"></i>
+                    </button>
+                </div>
+
+                <button onclick="finishQuiz()" class="px-4 py-3 rounded-2xl bg-rose-500/15 text-rose-400 border border-rose-500/30 hover:bg-rose-500/25 font-bold text-sm flex items-center gap-2 transition-all">
+                    <i class="fa-solid fa-flag-checkered"></i>
+                    <span>إنهاء وتسليم الدفتر</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- WINDOW 3: RESULTS VIEW -->
+        <section id="view-results" class="view-window">
+            <div class="theme-card rounded-3xl p-6 sm:p-8 text-center relative overflow-hidden mb-6">
+                <div class="max-w-lg mx-auto">
+                    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-extrabold bg-amber-500/20 text-amber-400 border border-amber-500/30 mb-4">
+                        <i class="fa-solid fa-award"></i>
+                        <span>اللقب الاقتصادي الرسمي مالتك</span>
+                    </div>
+
+                    <div id="rank-emoji" class="text-5xl sm:text-6xl mb-3"></div>
+                    <h2 id="rank-title" class="text-2xl sm:text-3xl font-black mb-2 text-amber-400"></h2>
+                    <p id="rank-desc" class="text-muted text-sm sm:text-base leading-relaxed mb-6"></p>
+
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+                        <div class="theme-secondary rounded-2xl p-4">
+                            <div class="text-xs text-muted mb-1">النسبة المئوية</div>
+                            <div id="res-percent" class="text-2xl font-black text-emerald-400"></div>
+                        </div>
+                        <div class="theme-secondary rounded-2xl p-4">
+                            <div class="text-xs text-muted mb-1">الإجابات الصحيحة</div>
+                            <div id="res-correct" class="text-2xl font-black text-emerald-400"></div>
+                        </div>
+                        <div class="theme-secondary rounded-2xl p-4">
+                            <div class="text-xs text-muted mb-1">الأخطاء / المتروك</div>
+                            <div id="res-wrong" class="text-2xl font-black text-rose-400"></div>
+                        </div>
+                        <div class="theme-secondary rounded-2xl p-4">
+                            <div class="text-xs text-muted mb-1">الوقت المستغرق</div>
+                            <div id="res-time" class="text-2xl font-black text-amber-400"></div>
+                        </div>
+                    </div>
+
+                    <div class="theme-secondary rounded-2xl p-4 text-right mb-6">
+                        <h4 class="text-xs font-extrabold text-muted uppercase mb-3 flex items-center gap-1.5">
+                            <i class="fa-solid fa-chart-pie text-amber-400"></i>
+                            <span>تحليل مستواك حسب صفحات الملزمة (ص 8 - ص 20):</span>
+                        </h4>
+                        <div id="page-breakdown-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs"></div>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
+                        <button onclick="openReviewWindow('all')" class="w-full sm:w-auto flex-1 py-3.5 px-6 rounded-2xl accent-btn font-extrabold text-sm sm:text-base flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-magnifying-glass-chart"></i>
+                            <span>مراجعة الأجوبة والشرح</span>
+                        </button>
+                        <button onclick="switchWindow('view-start')" class="w-full sm:w-auto py-3.5 px-6 rounded-2xl theme-secondary hover:border-emerald-500/40 font-extrabold text-sm sm:text-base flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-rotate-right"></i>
+                            <span>إعادة الاختبار بغير إعدادات</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- WINDOW 4: DETAILED REVIEW VIEW -->
+        <section id="view-review" class="view-window">
+            <div class="theme-card rounded-2xl p-3 sm:p-4 mb-4 sticky top-[42px] sm:top-[50px] z-20 backdrop-blur-md bg-opacity-95 shadow-sm border-b">
+                <div class="flex flex-col gap-2 mb-2">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <div class="leading-tight">
+                            <h2 class="text-sm sm:text-base font-black flex items-center gap-1.5">
+                                <i class="fa-solid fa-clipboard-check text-emerald-400"></i>
+                                <span>مراجعة الدفتر وشرح الإجابات</span>
+                            </h2>
+                            <p class="text-[10px] text-muted mt-0.5">مع شرح الملزمة (ص 8 - ص 20)</p>
+                        </div>
+                        <div class="flex items-center gap-1.5 shrink-0">
+                            <button onclick="toggleAllReviewExplanations()" id="btn-toggle-rev-exp" class="px-2 py-1 rounded-lg bg-amber-500/15 text-amber-400 border border-amber-500/30 text-[10px] font-bold flex items-center gap-1 hover:bg-amber-500/25">
+                                <i class="fa-solid fa-book-open"></i>
+                                <span id="toggle-rev-exp-text">إخفاء الشرح</span>
+                            </button>
+                            <button onclick="switchWindow('view-results')" class="px-2 py-1 rounded-lg theme-secondary text-[10px] font-bold hover:border-emerald-500/40 flex items-center gap-1">
+                                <i class="fa-solid fa-trophy text-amber-400"></i>
+                                <span>النتيجة</span>
+                            </button>
+                            <button onclick="switchWindow('view-start')" class="px-2 py-1 rounded-lg accent-btn text-[10px] font-bold flex items-center gap-1">
+                                <i class="fa-solid fa-house"></i>
+                                <span>البداية</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap sm:flex-nowrap items-center justify-between gap-2 pt-2 border-t border-white/5">
+                    <div class="flex items-center gap-1 overflow-x-auto no-scrollbar pb-1 w-full sm:w-auto flex-nowrap">
+                        <button onclick="filterReview('all')" id="rev-filter-all" class="px-2 py-1 rounded-lg text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 shrink-0">
+                            الكل (<span id="count-all">0</span>)
+                        </button>
+                        <button onclick="filterReview('correct')" id="rev-filter-correct" class="px-2 py-1 rounded-lg text-[10px] font-bold theme-secondary text-muted shrink-0">
+                            صحيحة ✅ (<span id="count-correct">0</span>)
+                        </button>
+                        <button onclick="filterReview('wrong')" id="rev-filter-wrong" class="px-2 py-1 rounded-lg text-[10px] font-bold theme-secondary text-muted shrink-0">
+                            خاطئة ❌ (<span id="count-wrong">0</span>)
+                        </button>
+                    </div>
+
+                    <select id="rev-page-select" onchange="filterReviewByPage(this.value)" class="w-full sm:w-auto rounded-lg px-2 py-1 text-[10px] font-bold theme-secondary focus:outline-none shrink-0">
+                        <option value="all">كل الصفحات (ص 8 - ص 20)</option>
+                        <option value="8">ص 8</option>
+                        <option value="9">ص 9</option>
+                        <option value="10">ص 10</option>
+                        <option value="11">ص 11</option>
+                        <option value="12">ص 12</option>
+                        <option value="13">ص 13</option>
+                        <option value="14">ص 14</option>
+                        <option value="15">ص 15</option>
+                        <option value="16">ص 16</option>
+                        <option value="17">ص 17</option>
+                        <option value="18">ص 18</option>
+                        <option value="19">ص 19</option>
+                        <option value="20">ص 20</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="review-list-container" class="space-y-4"></div>
+        </section>
+
+    </main>
+
+    <script>
+        const MASTER_QUESTIONS = [
+            // ==================== ص 8 ====================
+            {"id": 1, "page": 8, "category": "الإيراد الحدي والمرونة", "q": "إذا كان الطلب مرناً (Ed > 1)، وكان السعر (P = 4) ومعامل المرونة (Ed = 2)، فكم يبلغ الإيراد الحدي (MR)؟", "options": ["4", "2", "0", "-2"], "correct": 1, "hint": "طبق المعادلة: MR = 4 × (1 - 1/2) = 4 × 0.5 = 2.", "explanation": "في ص 8، بتطبيق المعادلة MR = P[1 - (1/Ed)]، نعوض P=4 و Ed=2 فيصبح MR = 4(1 - 0.5) = 2."},
+            {"id": 2, "page": 8, "category": "الإيراد الحدي والمرونة", "q": "عندما يكون الطلب مرناً (Ed > 1) ويكون الإيراد الحدي موجباً (MR > 0)، ماذا يحدث للإيراد الكلي عند تخفيض السعر؟", "options": ["ينخفض الإيراد الكلي", "يزداد الإيراد الكلي عند تخفيض السعر وينخفض عند رفع السعر", "يبقى الإيراد الكلي ثابتاً", "ينخفض الإيراد الكلي إلى الصفر"], "correct": 1, "hint": "مادام الطلب مرن، التنزيلات بالسعر تجيب زبائن هواي فيزيد الإيراد الكلي.", "explanation": "توضح ص 8 أنه عندما يكون الطلب مرناً (Ed > 1) فإن الإيراد الحدي موجب حيث يزداد الإيراد الكلي عند تخفيض السعر وينخفض عند رفع السعر."},
+            {"id": 3, "page": 8, "category": "الإيراد الحدي والمرونة", "q": "إذا كان الطلب أحادي (متكافئ) المرونة (Ed = 1)، وافترضنا أن السعر (P = 4)، فكم تكون قيمة الإيراد الحدي (MR)؟", "options": ["4", "1", "صفر (MR = 0)", "-4"], "correct": 2, "hint": "1 تقسيم 1 يساوي 1، و(1 ناقص 1) يساوي صفر، وأي رقم تضربه بصفر يطلع صفر!", "explanation": "في ص 8، عند تعويض P=4 و Ed=1 في المعادلة MR = 4(1 - 1/1) = 4(0) = 0."},
+            {"id": 4, "page": 8, "category": "الإيراد الحدي والمرونة", "q": "لماذا يكون الإيراد الحدي مساوياً للصفر (MR = 0) عندما تكون مرونة الطلب مساوية للواحد الصحيح (Ed = 1)؟", "options": ["لأن الكمية المطلوبة تساوي صفراً", "لأن التغير في السعر لن يؤدي إلى أي تغير في الإيراد الكلي", "لأن السعر يساوي صفراً", "لأن المشروع يتوقف عن الإنتاج"], "correct": 1, "hint": "الإيراد الكلي ثابت ما يتحرك، فالتغير بيه (الإيراد الحدي) يساوي صفر.", "explanation": "تذكر ص 8 أنه في حالة (Ed = 1) فإن التغير في السعر لن يؤدي إلى أي تغير في الإيراد الكلي، لذا يكون MR = 0."},
+            {"id": 5, "page": 8, "category": "الإيراد الحدي والمرونة", "q": "إذا كان الطلب قليل المرونة (Ed < 1)، فإن الإيراد الحدي يكون سالباً (MR < 0)، وهذا يعني أن الإيراد الكلي (TR):", "options": ["ينخفض عند تخفيض السعر ويزداد عند زيادة السعر", "يزداد عند تخفيض السعر وينخفض عند زيادة السعر", "لا يتأثر بتغير السعر", "يتساوى مع التكلفة الحدية"], "correct": 0, "hint": "الطلب غير مرن، فإذا نزلت السعر تخسر فلوس (ينخفض TR)، وإذا صعدت السعر تربح أكثر.", "explanation": "في ص 8، عندما يكون الطلب قليل المرونة (Ed < 1) يكون الإيراد الحدي سالباً (MR < 0) حيث ينخفض الإيراد الكلي عند تخفيض السعر ويزداد عند زيادة السعر."},
+            {"id": 6, "page": 8, "category": "الإيراد الحدي والمرونة", "q": "بافتراض أن السعر (P = 4) ومعامل مرونة الطلب (Ed = 0.2)، كم تبلغ قيمة الإيراد الحدي (MR)؟", "options": ["-4", "-16", "16", "-0.8"], "correct": 1, "hint": "1 تقسيم 0.2 يطلع 5.. و (1 ناقص 5) يساوي -4.. اضربها في 4 يطلع -16.", "explanation": "في ص 8، بتطبيق المعادلة: MR = 4(1 - 1/0.2) = 4(1 - 5) = 4 × (-4) = -16."},
+            {"id": 7, "page": 8, "category": "مرونة القوس", "q": "ما هي المرونة التي تمثل قياس المرونة بين نقطتين محددتين على منحنى طلب معين وتُستخدم للتغيرات الكبيرة؟", "options": ["مرونة النقطة", "مرونة القوس (Arc Elasticity)", "مرونة العرض", "المرونة الدخلية"], "correct": 1, "hint": "بين نقطتين على المنحنى تسوي مثل القوس، ونستخدمها من يصير تغير جبير.", "explanation": "تنص ص 8 على أن مرونة القوس (Arc Elasticity) تمثل قياس المرونة بين نقطتين محددتين على منحنى طلب معين وتستخدم للتغيرات الكبيرة."},
+            {"id": 8, "page": 8, "category": "مرونة القوس", "q": "في مثال مرونة القوس عند الانتقال من النقطة (j) حيث (P1=20, Q1=43) إلى النقطة (k) حيث (P2=10, Q2=75)، كم بلغت قيمة معامل المرونة وما تفسيرها؟", "options": ["-1.49 (انخفاض السعر 1% يزيد الطلب 1.49%)", "-0.43 (انخفاض السعر 1% يزيد الطلب 0.43%)", "-2.50 (طلب عديم المرونة)", "1.00 (طلب متكافئ المرونة)"], "correct": 0, "hint": "التغير بالكمية 32 والتغير بالسعر -10، تضرب في (20/43) يطلع 640 على -430 يعني -1.49.", "explanation": "في ص 8، حاصل ضرب (32 / -10) × (20 / 43) = 640 / -430 = -1.49، ويعني أن انخفاضاً قدره 1% في السعر ينجم عنه زيادة مقدارها 1.49% في الطلب."},
+
+            // ==================== ص 9 ====================
+            {"id": 9, "page": 9, "category": "مرونة القوس", "q": "لماذا يستلزم استخدام 'مرونة القوس' عناية كبيرة من جانب متخذ القرار؟", "options": ["لأنها لا تطبق إلا على السلع الكمالية", "لأنها تنطوي على احتمال الوقوع في الخطأ لاختلاف معامل المرونة بين نفس النقطتين إذا انقلب اتجاه التغير في السعر", "لأنها تعطي دائماً نتيجة موجبة", "لأنها تتطلب رسم خط مماس"], "correct": 1, "hint": "إذا تحسبها من j إلى k يطلع رقم، وإذا تعكسها من k إلى j يطلع غير رقم!", "explanation": "توضح ص 9 أن استخدام مرونة القوس يستلزم عناية كبيرة لأنها قد تنطوي على احتمال الوقوع في الخطأ، حيث يختلف معامل المرونة بين نفس النقطتين إذا انقلب اتجاه التغير في السعر."},
+            {"id": 10, "page": 9, "category": "مرونة القوس", "q": "عند التحرك المقلوب من النقطة (k) حيث (P1=10, Q1=75) إلى النقطة (j) حيث (P2=20, Q2=43)، كم يبلغ التغير في الكمية (ΔQd) والتغير في السعر (ΔP)؟", "options": ["ΔQd = 32 , ΔP = -10", "ΔQd = -32 , ΔP = 10", "ΔQd = 75 , ΔP = 20", "ΔQd = -10 , ΔP = 32"], "correct": 1, "hint": "الكمية نزلت من 75 للـ 43 يعني -32، والسعر صعد من 10 للـ 20 يعني +10.", "explanation": "في ص 9، عند التحرك من k إلى j فإن Q2-Q1 = 43-75 = -32، و P2-P1 = 20-10 = 10."},
+            {"id": 11, "page": 9, "category": "مرونة القوس", "q": "كم يبلغ معامل مرونة القوس عند التحرك المقلوب من النقطة (k) إلى النقطة (j) في المثال المذكور؟", "options": ["1.49", "0.43 (أو -0.43)", "1.00", "3.20"], "correct": 1, "hint": "320 تقسيم 750 يطلع 0.43.", "explanation": "حسب الحسابات في ص 9: (-32 / 10) × (10 / 75) = 320 / 750 = 0.43."},
+            {"id": 12, "page": 9, "category": "مرونة القوس", "q": "ما هو التعليق الاقتصادي الصحيح على نتيجة مرونة القوس (0.43) عند التحرك من (k) إلى (j)؟", "options": ["ارتفاع قدره 1% في سعر السلعة ينجم عنه انخفاض مقداره 0.43% في الطلب على السلعة", "انخفاض قدره 1% في السعر يزيد الطلب بمقدار 0.43%", "الطلب في هذه الحالة لانهائي المرونة", "ارتفاع السعر بنسبة 0.43% يخفض الطلب بنسبة 10%"], "correct": 0, "hint": "السعر صعد 1%، فالطلب نزل بنسبة 0.43%.", "explanation": "في ص 9، التعليق ينص على أن ارتفاعاً قدره (1%) في سعر السلعة (x) ينجم عنه انخفاض مقداره (0.43%) في الطلب على السلعة."},
+            {"id": 13, "page": 9, "category": "مرونة القوس", "q": "ماذا نستنتج من اختلاف معامل مرونة القوس بين (1.49) و (0.43) لنفس النقطتين (j) و (k)؟", "options": ["أن قانون الطلب غير صحيح", "أن معامل مرونة القوس يعتمد أيضاً على اتجاه التغير في سعر السلعة", "أن المنحنى غير خطي", "أن السلعة من سلع جيفين"], "correct": 1, "hint": "اتجاه التحرك (صعود لو نزول بالسعر) يغير النتيجة النهائية.", "explanation": "تؤكد ص 9 أن مقياس معامل المرونة يختلف عندما يكون اتجاه تحرك سعر السلعة مقلوباً، أي أنه يعتمد أيضاً على اتجاه التغير في سعر السلعة."},
+            {"id": 14, "page": 9, "category": "مرونة النقطة", "q": "عند استخدام فكرة 'مرونة النقطة' لتبسيط مشكلة قياس مرونة الطلب، ماذا نفترض ابتداءً بشأن التغير في السعر والكمية؟", "options": ["أن التغيرات كبيرة جداً", "وجود منحنى طلب خطي حيث تكون تركيبة التغير في السعر والكمية المطلوبة متناهية في الصغر", "أن السعر ثابت لا يتغير أبداً", "أن الكمية المطلوبة تساوي صفراً"], "correct": 1, "hint": "نقطة وحدة يعني التغير بالسعر والكمية كلش صغير (متناهي في الصغر).", "explanation": "في ص 9، نفترض ابتداءً وجود منحنى طلب خطي حيث تكون تركيبة التغير في السعر والكمية المطلوبة متناهية في الصغر."},
+            {"id": 15, "page": 9, "category": "مرونة النقطة", "q": "تُعَد 'مرونة النقطة' (مثل مرونة النقطة P أو B على خط الطلب DM) بديلاً عن فكرة:", "options": ["مرونة العرض", "الإيراد الحدي", "المرونة بين نقطتين التي تمثل مرونة القوس", "دالة العرض"], "correct": 2, "hint": "بمكان ما نقيس بين نقطتين (قوس)، نقيس بنقطة وحدة!", "explanation": "تذكر ص 9 أن مرونة النقطة تمثل المرونة في نقطة محددة على منحنى طلب خطي، وهي بديل لفكرة المرونة بين نقطتين التي تمثل مرونة القوس."},
+            {"id": 16, "page": 9, "category": "مرونة النقطة", "q": "على خط الطلب (DM)، كيف يبدو التغير في السعر (ΔP) عند التحرك من النقطة (B) مقترباً أكثر فأكثر نحو النقطة (P)؟", "options": ["يتضاعف باستمرار", "يصبح بمقدار أصغر فأصغر حتى يصبح متناهياً في الصغر عند النقطة (P) تقريباً", "يبقى ثابتاً", "يتحول إلى قيمة سالبة لا نهائية"], "correct": 1, "hint": "كلما تقترب النقطة من أختها، المسافة (التغير بالسعر) تصغر لحد ما تتلاشى.", "explanation": "في نهاية ص 9، التحرك من B نحو P يتضمن تغيراً في السعر (ΔP) بمقدار أصغر فأصغر حتى نصل إلى النقطة P تقريباً حيث يصبح متناهياً في الصغر."},
+
+            // ==================== ص 10 ====================
+            {"id": 17, "page": 10, "category": "مرونة النقطة", "q": "في صيغة مرونة النقطة (Ep = ∂Q/∂P × P/Q)، لماذا تم الاستعاضة عن (ΔQd/ΔP) بالصيغة (∂Q/∂P)؟", "options": ["لأنها تمثل المشتقة التي تعبر عن انحدار خط الطلب (DM) عند التغير الطفيف جداً", "لأن السعر لا يؤثر في الكمية", "لتحويل العلاقة من عكسية إلى طردية", "لإلغاء أثر الكمية المطلوبة"], "correct": 0, "hint": "المشتقة بالرياضيات (∂Q/∂P) هي الميل أو انحدار الخط لما التغير يكون كلش طفيف.", "explanation": "توضح ص 10 أنه تم الاستعاضة عن ΔQd/ΔP بالصيغة ∂Q/∂P والتي تمثل المشتقة وتعبر عن انحدار خط الطلب (DM)."},
+            {"id": 18, "page": 10, "category": "مرونة النقطة", "q": "عن ماذا تعبر 'مرونة النقطة' في آنٍ واحد؟", "options": ["عن التكلفة الكلية والربح الصافي", "عن نسبة السعر إلى الكمية المطلوبة في نقطة معينة، وعن درجة انحدار معينة لخط الطلب", "عن عرض الصناعة وطلب السوق", "عن الضرائب والإعانات"], "correct": 1, "hint": "بيها جزئين: (P/Q) اللي هي نسبة السعر للكمية، والمشتقة اللي هي درجة انحدار الخط.", "explanation": "في ص 10، تعبر مرونة النقطة عن نسبة السعر إلى الكمية المطلوبة في نقطة معينة، كما تعبر أيضاً عن درجة انحدار معينة لخط الطلب."},
+            {"id": 19, "page": 10, "category": "مرونة النقطة", "q": "هندسياً، على الخط المستقيم (DM) في النقطة (P) التي مسقطها (Q) على المحور الأفقي، ماذا يعطينا انحدار الخط (∂Q/∂P)؟", "options": ["OQ / PQ", "QM / PQ", "PQ / QM", "DM / OQ"], "correct": 1, "hint": "التغير الأفقي المتبقي (QM) مقسوماً على العمود (PQ).", "explanation": "حسب الاشتقاق الهندسي في ص 10، فإن انحدار الخط المستقيم (DM) في النقطة (P) يعطينا هندسياً (QM / PQ)."},
+            {"id": 20, "page": 10, "category": "مرونة النقطة", "q": "بعد تعويض السعر (P = PQ) والكمية (Q = OQ) في معادلة مرونة النقطة: Ep = (QM / PQ) × (PQ / OQ)، ما هي الصيغة الهندسية المختصرة التي نصل إليها؟", "options": ["Ep = PQ / OQ", "Ep = QM / OQ", "Ep = OQ / QM", "Ep = QM × PQ"], "correct": 1, "hint": "تختصر PQ بالبسط ويا PQ بالمقام، فيبقى QM على OQ.", "explanation": "في ص 10، باختصار PQ مع PQ نصل إلى الصيغة الهندسية: Ep = QM / OQ."},
+            {"id": 21, "page": 10, "category": "مرونة النقطة", "q": "من الناحية الهندسية، ماذا تساوي المرونة السعرية لنقطة معينة على منحنى طلب خطي (خط الطلب)؟", "options": ["نسبة الجزء الأيسر إلى الجزء الأيمن", "نسبة الجزء الأيمن إلى الجزء الأيسر من خط الطلب", "مجموع الجزأين الأيمن والأيسر", "حاصل ضرب السعر في المسافة الأفقية"], "correct": 1, "hint": "احفظها قاعدة ذهبية: الجزء الأيمن تقسيم الجزء الأيسر!", "explanation": "تؤكد ص 10 هندسياً أن المرونة السعرية لنقطة على خط الطلب تساوي: (الجزء الأيمن / الجزء الأيسر)."},
+            {"id": 22, "page": 10, "category": "مرونة النقطة", "q": "بناءً على قانون (الجزء الأيمن / الجزء الأيسر)، ما الذي نلاحظه بشأن منحنى الطلب ذي الخط المستقيم؟", "options": ["له مرونة ثابتة في جميع نقاطه", "له مرونات مختلفة باختلاف موقع النقاط عليه", "مرونته دائماً تساوي صفراً", "مرونته دائماً تساوي واحداً صحيحاً"], "correct": 1, "hint": "رغم أن ميل الخط ثابت، بس المرونة تتغير من نقطة لنقطة حسب موقعها عالخط!", "explanation": "تذكر ص 10 أنه من الملاحظ أن الطلب ذا الخط المستقيم له مرونات مختلفة باختلاف موقع النقاط عليه."},
+            {"id": 23, "page": 10, "category": "مرونة النقطة", "q": "على خط الطلب المستقيم، أين تقع النقطة التي تكون فيها مرونة الطلب متكافئة (Ed = 1)؟", "options": ["عند تقاطع الخط مع المحور العمودي", "في منتصف خط الطلب تماماً (حيث يتساوى الجزء الأيمن مع الجزء الأيسر)", "عند تقاطع الخط مع المحور الأفقي", "لا توجد نقطة مرونتها تساوي 1"], "correct": 1, "hint": "حتى يطلع الكسر (الأيمن / الأيسر) يساوي 1، لازم الجزئين متساويين يعني بالنص بالضبط!", "explanation": "يظهر من الشكل في ص 10 وجدول الحل في ص 11 أن Ed = 1 تقع في منتصف الخط (النقطة B عند الكمية 10 من أصل 20)."},
+            {"id": 24, "page": 10, "category": "مرونة النقطة", "q": "في الشكل التوضيحي لدرجات المرونة على خط الطلب (ص 10)، ماذا تكون قيمة المرونة في الجزء العلوي الواقع بين نقطة التقاطع العمودي ومنتصف الخط؟", "options": ["Ed < 1", "Ed > 1 (عالي المرونة)", "Ed = 0", "Ed = 1"], "correct": 1, "hint": "بالفوك يكون الجزء الأيمن أطول من الجزء الأيسر، فتطلع المرونة أكبر من 1.", "explanation": "يوضح الشكل في ص 10 أن النقاط الواقعة فوق المنتصف (قبل الوصول للمحور العمودي) تكون مرونتها أكبر من الواحد (Ed > 1)."},
+
+            // ==================== ص 11 ====================
+            {"id": 25, "page": 11, "category": "تطبيقات مرونة النقطة", "q": "في مثال خط الطلب (DM) المقسم عند الكميات (0, 5, 10, 15, 20) للنقاط (D, P, B, L, M)، كم تبلغ مرونة النقطة (M) الواقعة على المحور الأفقي عند الكمية 20؟", "options": ["Ed = ∞", "Ed = 1", "Ed = 0 (لأن 0 / 20 = 0)", "Ed = 20"], "correct": 2, "hint": "النقطة M صايرة بأقصى اليمين، يعني ماكو شي على يمينها (الجزء الأيمن = صفر).", "explanation": "في جدول الحل ص 11، عند النقطة M: الجزء الأيمن = 0 والجزء الأيسر = 20، إذن Ed = 0/20 = 0 (عديم المرونة)."},
+            {"id": 26, "page": 11, "category": "تطبيقات مرونة النقطة", "q": "في نفس المثال (طول القاعدة 20)، كم تبلغ مرونة النقطة (L) الواقعة عند الكمية (15) وما نوعها؟", "options": ["3 (Ed > 1)", "0.33 (Ed < 1) لأن 5 / 15 = 0.3", "1 (Ed = 1)", "0 (Ed = 0)"], "correct": 1, "hint": "يمين الـ 15 بقى 5 (من 15 للـ 20)، ويسارها 15.. اقسم 5 على 15 يطلع ثلث (0.3).", "explanation": "في جدول ص 11، عند النقطة L: الجزء الأيمن = 5 والجزء الأيسر = 15، إذن Ed = 5/15 = 0.3 وهي أقل من الواحد (Ed < 1)."},
+            {"id": 27, "page": 11, "category": "تطبيقات مرونة النقطة", "q": "في نفس المثال، كم تبلغ مرونة النقطة (B) الواقعة عند الكمية (10)؟", "options": ["Ed = 10/10 = 1", "Ed = 20/10 = 2", "Ed = 0", "Ed = 0.5"], "correct": 0, "hint": "يمينها 10 ويسارها 10، فـ 10 تقسيم 10 يساوي 1.", "explanation": "في جدول ص 11، عند النقطة B: الجزء الأيمن (10) / الجزء الأيسر (10) = 1 (أحادي المرونة)."},
+            {"id": 28, "page": 11, "category": "تطبيقات مرونة النقطة", "q": "في نفس المثال، كم تبلغ مرونة النقطة (P) الواقعة عند الكمية (5) وما طبيعة الطلب عندها؟", "options": ["0.3 (قليل المرونة)", "3 (عالي المرونة Ed > 1) لأن 15 / 5 = 3", "5 (لانهائي المرونة)", "1 (متكافئ المرونة)"], "correct": 1, "hint": "من الـ 5 للـ 20 اكو 15 على يمينها، وعلى يسارها 5.. اقسم 15 على 5 يطلع 3.", "explanation": "في جدول ص 11، عند النقطة P: الجزء الأيمن (15) / الجزء الأيسر (5) = 3، أي أن الطلب عالي المرونة (Ed > 1)."},
+            {"id": 29, "page": 11, "category": "تطبيقات مرونة النقطة", "q": "في نفس المثال، كم تبلغ مرونة النقطة (D) الواقعة على المحور العمودي (عندما الكمية = 0)؟", "options": ["0", "20", "∞ (ما لا نهاية، لأن 20 / 0 = ∞)", "1"], "correct": 2, "hint": "الجزء الأيمن كله 20، والجزء الأيسر صفر.. أي رقم تقسيم صفر يعطي ما لا نهاية (∞).", "explanation": "في جدول ص 11، عند النقطة D: الجزء الأيمن (20) / الجزء الأيسر (0) = ∞ (طلب لانهائي المرونة Ed = ∞)."},
+            {"id": 30, "page": 11, "category": "مرونة النقطة (غير خطي)", "q": "إذا كان منحنى الطلب 'غير خطي' (منحنياً)، فكيف يتم قياس مرونة النقطة عليه (مثل النقطة P)؟", "options": ["لا يمكن قياسها إطلاقاً", "يستلزم رسم خط مماس لمنحنى الطلب يمسه في النقطة المراد قياس مرونتها", "بضرب السعر في الكمية مباشرة", "برسم عمود قائم على المحور العمودي"], "correct": 1, "hint": "نجيب مسطرة ونرسم خط مستقيم يطخ (يمس) المنحنى بالنقطة P ونحسب مرونة الخط!", "explanation": "توضح ص 11 أنه إذا كان منحنى الطلب غير خطي، فإن قياس مرونة النقطة يستلزم رسم خط مماس لمنحنى الطلب يحصل التماس فيه عند النقطة المراد قياس مرونتها."},
+            {"id": 31, "page": 11, "category": "مرونة النقطة (غير خطي)", "q": "عند رسم الخط المماس (MN) الذي يمس منحنى الطلب غير الخطي في النقطة (P)، فإن مرونة الطلب في نقطة التماس تكون:", "options": ["أكبر من مرونة الخط المماس", "أصغر من مرونة الخط المماس", "مساوية لمرونة الخط المماس في تلك النقطة", "مساوية للصفر دائماً"], "correct": 2, "hint": "نقطة التماس تاخذ نفس مرونة الخط المماس بالضبط.", "explanation": "تذكر ص 11 أن مرونة الطلب في نقطة التماس ستكون مساوية لمرونة الخط في تلك النقطة."},
+            {"id": 32, "page": 11, "category": "مرونة النقطة (غير خطي)", "q": "في الرسم البياني لمنحنى الطلب غير الخطي الذي يمسه الخط (MN) في النقطة (P) ومسقطها الأفقي (Q)، ما هي صيغة مرونة النقطة (Ep)؟", "options": ["Ep = PM / PN = OQ / QN", "Ep = PN / PM = QN / OQ", "Ep = MN / OQ", "Ep = PR / OQ"], "correct": 1, "hint": "نفس قاعدة الجزء الأيمن (PN أو QN) تقسيم الجزء الأيسر (PM أو OQ).", "explanation": "في نهاية ص 11، مرونة النقطة P على المنحنى غير الخطي هي: Ep = PN / PM = QN / OQ."},
+
+            // ==================== ص 12 ====================
+            {"id": 33, "page": 12, "category": "نظرية العرض", "q": "ماذا يمثل 'عرض السوق' في نظرية العرض؟", "options": ["الكميات التي يطلبها المستهلكون فقط", "الكميات التي يرتضي البائعون والمنتجون بيعها في وقت معين مقابل مستويات مختلفة من الأسعار مع بقاء الأمور الأخرى على حالها", "إجمالي المخزون التالف في المصانع", "الكميات التي تفرضها الحكومة مجاناً"], "correct": 1, "hint": "العرض يخص البائعين والمنتجين: شكد يقبلون يبيعون بأسعار مختلفة بوكت معين.", "explanation": "في مطلع ص 12، يمثل عرض السوق الكميات التي يرتضي البائعون والمنتجون بيعها في وقت معين مقابل مستويات مختلفة من الأسعار بافتراض بقاء الأمور الأخرى على حالها."},
+            {"id": 34, "page": 12, "category": "نظرية العرض", "q": "ما هي طبيعة العلاقة بين السعر والكمية التي يمثلها 'جدول العرض' بافتراض ثبات الأمور الأخرى؟", "options": ["علاقة سالبة (عكسية)", "علاقة موجبة (طردية)", "علاقة غير خطية متناقصة", "علاقة منعدمة"], "correct": 1, "hint": "البائع يفرح من يصعد السعر، فيعرض بضاعة أكثر (علاقة موجبة طردية).", "explanation": "تذكر ص 12 أن جدول العرض يمثل العلاقة الموجبة (الطردية) بين السعر والكمية بافتراض ثبات الأمور الأخرى."},
+            {"id": 35, "page": 12, "category": "العرض والكمية المعروضة", "q": "ما هو الفرق الجوهري بين 'العرض' و 'الكمية المعروضة'؟", "options": ["لا يوجد أي فرق بينهما", "العرض يمثل كافة العلاقة (قائمة الكميات عند الأسعار المختلفة)، بينما الكمية المعروضة تنصرف إلى كمية معينة (نقطة محددة) من القائمة أو المنحنى", "العرض يخص المستهلك والكمية المعروضة تخص المنتج", "الكمية المعروضة تشمل الجدول بأكمله"], "correct": 1, "hint": "العرض هو الجدول أو المنحنى كله، بينما الكمية المعروضة هي رقم واحد (نقطة وحدة) مقابل سعر معين.", "explanation": "توضح ص 12 أن العرض يمثل كافة العلاقة بين السعر والكمية (قائمة الكميات)، أما الكمية المعروضة فتنصرف إلى كمية معينة أي نقطة محددة من القائمة أو منحنى العرض."},
+            {"id": 36, "page": 12, "category": "دوافع العرض", "q": "من أي هدف أساسي تنطلق العلاقة الطردية (الموجبة) بين السعر والكمية على امتداد منحنى العرض؟", "options": ["هدف تقليل الإنتاج", "هدف تعظيم الأرباح الذي يسعى إليه البائعون والمنتجون", "هدف زيادة الضرائب الحكومية", "هدف تقليل ساعات العمل"], "correct": 1, "hint": "كل تاجر ومنتج هدفه الأول يعظم أرباحه!", "explanation": "تنص ص 12 على أن العلاقة الطردية على امتداد منحنى العرض تنطلق من هدف تعظيم الأرباح الذي يسعى إليه البائعون والمنتجون."},
+            {"id": 37, "page": 12, "category": "دوافع العرض", "q": "عندما يزداد سعر سلعة ما (مع ثبات أسعار المنتجات والمدخلات الأخرى)، ماذا يفعل المنتجون؟", "options": ["يتوقفون عن إنتاجها", "تزداد الربحية المتحققة منها، فيقومون بتحويل المصادر أو المستلزمات من إنتاج السلع الأقل ربحاً إلى إنتاج السلع الأكثر ربحاً", "يخفضون الكمية المعروضة منها", "يبيعون المصانع"], "correct": 1, "hint": "من يشوفون سلعة صارت تربح هواي، يحولون المواد والعمال الها حتى ينتجوها أكثر.", "explanation": "في ص 12، زيادة سعر السلعة تزيد ربحيتها، مما يدفع المنتجين إلى تحويل المصادر أو المستلزمات من إنتاج السلع التي تحقق أرباحاً أقل إلى السلع التي تحقق أرباحاً أكثر."},
+            {"id": 38, "page": 12, "category": "افتراضات جدول العرض", "q": "لماذا نضطر في دراسة جدول العرض إلى 'تثبيت العوامل الأخرى' المؤثرة في الكميات المعروضة؟", "options": ["لأن العوامل الأخرى غير موجودة في الواقع", "لكي نتمكن من التركيز على العلاقة بين سعر السلعة والكمية المعروضة منها، خاصة وأن أكثر تلك العوامل تحتاج إلى وقت لكي تتغير", "لأن السعر لا يؤثر في العرض", "لمنع المستهلكين من الشراء"], "correct": 1, "hint": "نثبت الباقي حتى نركز بس على السعر والكمية، ولأن باقي العوامل يرادلها وكت يلا تتغير.", "explanation": "تذكر ص 12 (النقطة 1) أننا نضطر لتثبيت تلك العوامل للتركيز على علاقة السعر بالكمية المعروضة، خاصة وأن أكثر تلك العوامل تحتاج إلى وقت ما لكي تتغير."},
+            {"id": 39, "page": 12, "category": "افتراضات جدول العرض", "q": "إلى جانب السعر المعين، بأي عنصر آخر يجب أن ترتبط الكميات المختلفة التي يشملها جدول العرض؟ ولماذا؟", "options": ["بلون السلعة فقط", "بزمن محدد (فترة زمنية)، لأن السلع تتفاوت من حيث الوقت اللازم لإنتاجها", "بعدد المستهلكين الأجانب", "بسعر الصرف فقط"], "correct": 1, "hint": "ما يصير تكول أعرض 3000 قطعة بسعر 250 دينار وتسكت؛ لازم تكول باليوم لو بالشهر لو بالسنة!", "explanation": "تؤكد ص 12 (النقطة 2) أن الكميات في جدول العرض ترتبط بزمن محدد أيضاً، إذ يجب معرفة الفترة الزمنية لأن السلع تتفاوت من حيث الوقت لإنتاجها."},
+            {"id": 40, "page": 12, "category": "دالة العرض", "q": "في تعريف العرض وعلاقته الدالية، أي المتغيرين يُعد 'المتغير المستقل' وأيهما يُعد 'المتغير التابع'؟", "options": ["الكمية هي المتغير المستقل والسعر هو المتغير التابع", "السعر هو المتغير المستقل والكمية المعروضة هي المتغير التابع", "كلاهما متغيران تابعان", "كلاهما متغيران مستقلان"], "correct": 1, "hint": "السعر يتغير أول (مستقل)، والكمية المعروضة تتبعه (تابع).", "explanation": "في نهاية ص 12، يركز تعريف العرض على علاقة سعر السلعة بالكمية المعروضة باعتبار السعر هو المتغير المستقل والكمية هي المتغير التابع وباتجاه طردي."},
+
+            // ==================== ص 13 ====================
+            {"id": 41, "page": 13, "category": "جدول ومنحنى العرض", "q": "في جدول (1) للعرض الافتراضي (ص 13)، عندما كان سعر الوحدة (200) دينار كانت الكمية المعروضة (600) وحدة شهرياً. كم أصبحت الكمية المعروضة عندما ارتفع السعر إلى (500) دينار؟", "options": ["1000 وحدة", "1300 وحدة", "1700 وحدة", "1900 وحدة"], "correct": 2, "hint": "بالجدول: 200->600، 300->1000، 400->1300، 500->1700، 600->1900.", "explanation": "حسب جدول (1) في ص 13، مقابل السعر 500 دينار تبلغ الكمية المعروضة شهرياً 1700 وحدة."},
+            {"id": 42, "page": 13, "category": "جدول ومنحنى العرض", "q": "في نفس الجدول (ص 13)، عند أي سعر وصلت الكمية المعروضة شهرياً إلى (1900) وحدة؟", "options": ["300 دينار", "400 دينار", "500 دينار", "600 دينار"], "correct": 3, "hint": "أعلى كمية بالجدول (1900) تقابل أعلى سعر (600 دينار).", "explanation": "في جدول (1) ص 13، عند سعر وحدة السلعة 600 دينار تكون الكمية المعروضة 1900 وحدة."},
+            {"id": 43, "page": 13, "category": "دالة العرض", "q": "ماذا تعني الصيغة الدالية لمعادلة العرض: Qs = f(p)؟", "options": ["أن السعر دالة تابعة للكمية", "أن الكمية المعروضة (Qs) هي دالة تابعة (f) للتغير في سعر السلعة (p)", "أن العرض يساوي الطلب دائماً", "أن التكلفة ثابتة"], "correct": 1, "hint": "Qs (الكمية المعروضة) تابعة للتغير بـ p (السعر).", "explanation": "تذكر ص 13 أن الصيغة Qs = f(p) تعني أن الكمية المعروضة (Qs) هي دالة تابعة (f) للتغير في سعر السلعة (p)."},
+            {"id": 44, "page": 13, "category": "تفسير العلاقة الطردية", "q": "إلى جانب هدف تعظيم الأرباح، ما هو المبرر الثاني الذي يفسر ضرورة زيادة سعر السلعة لكي يقوم المنتجون بزيادة الكمية المعروضة؟", "options": ["مبرر يتصل بنفقة (أي تكلفة) الإنتاج", "رغبة المنتجين في تقليل المبيعات", "ثبات كفاءة عناصر الإنتاج في جميع الصناعات", "انخفاض أجور العمال عند زيادة الإنتاج"], "correct": 0, "hint": "حتى تنتج أكثر، تكلفتك راح تصعد، فلازم السعر يصعد حتى يغطي التكلفة!", "explanation": "توضح ص 13 أنه إلى جانب هدف تعظيم الأرباح، يوجد مبرر آخر يتصل بنفقة (أي تكلفة) الإنتاج."},
+            {"id": 45, "page": 13, "category": "تفسير العلاقة الطردية", "q": "لماذا يضطر المنتجون لدفع مكافآت أعلى لأصحاب المصادر وعناصر الإنتاج عند الرغبة في زيادة إنتاج السلعة (أ)؟", "options": ["لأن زيادة الإنتاج تستلزم تحويل أو سحب المزيد من المصادر وعناصر الإنتاج التي كانت تعمل في إنتاج سلع أخرى", "لأن الحكومة تمنع عمل العمال", "لأن المصادر متوفرة مجاناً بلا حدود", "لأن الأسعار في السوق تنخفض"], "correct": 0, "hint": "حتى تقنع عامل أو مورد يعوف شغله بغير سلعة ويجي يشتغل يمك، لازم تنطيه مكافأة وأجر أعلى.", "explanation": "في ص 13، زيادة إنتاج السلعة (أ) يستلزم تحويل أو سحب المزيد من المصادر وعناصر الإنتاج من سلع أخرى، مما يفرض دفع مكافآت أعلى لأصحابها."},
+            {"id": 46, "page": 13, "category": "تفسير العلاقة الطردية", "q": "ماذا يحدث لمتوسط تكلفة إنتاج وحدة السلعة (أ) عندما نسحب عناصر إنتاج من سلع أخرى تكون كفاءتها في إنتاج السلعة (أ) أقل من كفاءتها السابقة؟", "options": ["ينخفض متوسط تكلفة الإنتاج", "يرتفع متوسط تكلفة إنتاج وحدة السلعة", "يصبح متوسط التكلفة صفراً", "لا تتأثر التكلفة إطلاقاً"], "correct": 1, "hint": "أجورهم أعلى وكفاءتهم بسلعتك أقل = التكلفة المتوسطة للوحدة راح تصعد!", "explanation": "في ص 13، انخفاض كفاءة هذه المصادر المسحوبة في إنتاج السلعة (أ) مع دفع مكافآت أعلى يعني ارتفاع متوسط تكلفة إنتاج وحدة السلعة."},
+            {"id": 47, "page": 13, "category": "تفسير العلاقة الطردية", "q": "بما أن المنتجين يتحملون ارتفاعاً مضطرداً في تكلفة الإنتاج عند زيادة الكميات المعروضة، فما الذي يستلزمه ذلك؟", "options": ["تخفيض سعر وحدة السلعة", "زيادة سعر وحدة السلعة لتعويض ارتفاع التكلفة", "تثبيت السعر مهما زادت التكلفة", "توزيع السلعة مجاناً"], "correct": 1, "hint": "التكلفة تصعد، فلازم السعر هم يصعد وياها.", "explanation": "تؤكد ص 13 أن تحمل المنتجين لارتفاع مضطرد في تكلفة إنتاجها يستلزم زيادة سعر وحدة السلعة."},
+            {"id": 48, "page": 13, "category": "منحنى عرض الصناعة", "q": "ممَّ يتكون 'منحنى عرض الصناعة' (منحنى العرض الكلي للسلعة في السوق)؟", "options": ["من منحنى عرض مشروع واحد فقط", "من مجموع منحنيات العرض المختلفة للمشاريع المنتجة لنفس السلعة", "من منحنيات طلب المستهلكين", "من الفرق بين العرض والطلب"], "correct": 1, "hint": "عرض الصناعة يعني نجمع عروض كل المعامل (المشاريع) اللي تنتج نفس السلعة بالسوك.", "explanation": "في نهاية ص 13، يتكون منحنى العرض الكلي للسلعة في السوق (منحنى عرض الصناعة) من مجموع منحنيات العرض المختلفة للمشاريع المنتجة لنفس السلعة."},
+
+            // ==================== ص 14 ====================
+            {"id": 49, "page": 14, "category": "منحنى عرض الصناعة", "q": "في جدول عرض الصناعة (ص 14) المكون من 4 مشاريع، عندما كان سعر السلعة (100) دينار، عرضت المشاريع الأربعة الكميات (100، 50، 100، 150). كم يبلغ عرض الصناعة الكلي؟", "options": ["300 وحدة", "400 وحدة", "650 وحدة", "500 وحدة"], "correct": 1, "hint": "اجمعهم: 100 + 50 + 100 + 150 = 400.", "explanation": "حسب الجدول في ص 14، عند السعر 100 دينار يكون العرض الكلي للمشاريع (عرض الصناعة) = 400 وحدة."},
+            {"id": 50, "page": 14, "category": "منحنى عرض الصناعة", "q": "في نفس جدول عرض الصناعة (ص 14)، عندما ارتفع السعر إلى (300) دينار، عرضت المشاريع الكميات (300، 150، 200، 250). كم بلغ عرض الصناعة؟", "options": ["650 وحدة", "900 وحدة", "1150 وحدة", "1400 وحدة"], "correct": 1, "hint": "300 + 150 + 200 + 250 = 900.", "explanation": "في جدول ص 14، عند السعر 300 دينار يبلغ العرض الكلي للمشاريع (عرض الصناعة) 900 وحدة."},
+            {"id": 51, "page": 14, "category": "منحنى عرض الصناعة", "q": "في نفس جدول عرض الصناعة (ص 14)، كم يبلغ العرض الكلي للمشاريع الأربعة عند سعر (600) دينار (حيث تعرض: 600، 300، 350، 400)؟", "options": ["1400 وحدة", "1650 وحدة", "1800 وحدة", "1150 وحدة"], "correct": 1, "hint": "600 + 300 + 350 + 400 = 1650.", "explanation": "في جدول ص 14، عند السعر 600 دينار يكون عرض الصناعة الكلي = 1650 وحدة."},
+            {"id": 52, "page": 14, "category": "منحنى عرض الصناعة", "q": "ما هو الاتجاه الذي يأخذه 'منحنى عرض الصناعة' في السوق (شكل 2)؟", "options": ["ينطلق من أعلى اليسار وينحدر نحو اليمين", "يأخذ نفس اتجاه منحنى عرض المشروع، فينطلق من أسفل اليسار ويتصاعد نحو اليمين", "يكون خطاً عمودياً دائماً", "يكون خطاً أفقياً دائماً"], "correct": 1, "hint": "لأنه مجموع منحنيات المشاريع، فيصعد مثلها من أسفل اليسار إلى اليمين.", "explanation": "توضح ص 14 أن منحنى عرض السلعة في السوق يأخذ نفس اتجاه منحنى عرض المشروع، أي ينطلق من أسفل اليسار ويتصاعد نحو اليمين بدرجات متفاوتة."},
+            {"id": 53, "page": 14, "category": "العوامل المحددة للعرض", "q": "ما هو دور 'المعطيات أو الأمور الأخرى' التي نفترض ثباتها عند رسم منحنى العرض؟", "options": ["لا تأثير لها إطلاقاً", "تؤثر في إمكانات العرض وتحدد بالتالي طبيعة منحنى العرض في وقت معين", "تؤثر في طلب المستهلكين فقط", "تغير السعر فقط دون المساس بالعرض"], "correct": 1, "hint": "هاي العوامل هي اللي تحدد قوة وإمكانات العرض ومكان المنحنى.", "explanation": "في نهاية ص 14، تؤثر الأمور أو المعطيات الأخرى في إمكانات العرض وتحدد بالتالي طبيعة منحنى العرض في وقت معين."},
+
+            // ==================== ص 15 ====================
+            {"id": 54, "page": 15, "category": "العوامل المحددة للعرض", "q": "كيف يؤثر ارتفاع أو انخفاض 'أسعار المستلزمات' على تكلفة الإنتاج وإمكانات عرض السلعة؟", "options": ["ارتفاعها يخفض التكلفة ويزيد العرض", "ارتفاعها يزيد تكلفة الإنتاج فيؤثر سلباً على إمكانات العرض، وانخفاضها يؤثر إيجابياً", "لا علاقة لأسعار المستلزمات بتكلفة الإنتاج", "انخفاضها يؤدي لتوقف الإنتاج"], "correct": 1, "hint": "من تغلى المواد الأولية، التكلفة تصعد والعرض يتأثر سلبياً، والعكس صحيح.", "explanation": "في ص 15 (النقطة 1)، عندما ترتفع أسعار المستلزمات تزداد تكلفة الإنتاج مما يؤثر سلباً على إمكانات العرض، وعندما تنخفض يؤثر ذلك إيجابياً."},
+            {"id": 55, "page": 15, "category": "العوامل المحددة للعرض", "q": "إذا كان إنتاج سلعة ما يتطلب استخدام 'مستلزمات عامة' تشترك فيها عمليات إنتاج سلع أخرى، فكيف يؤثر ذلك على استجابة الكمية المعروضة؟", "options": ["يتيح إمكانية تحويل تلك المستلزمات من سلعة لأخرى، فيؤثر إيجابياً على مدى استجابة الكمية المعروضة للتغير في سعرها", "يمنع تحويل المستلزمات ويؤثر سلباً", "يجعل العرض عديم المرونة", "يزيد من تلف السلعة"], "correct": 0, "hint": "المواد العامة (مثل الطحين والشكر) بسهولة تحولها من منتج لمنتج ثاني، فالاستجابة تكون سريعة وإيجابية.", "explanation": "توضح ص 15 أن استخدام مستلزمات عامة يتيح إمكانية تحويلها من سلعة إلى أخرى، مما يؤثر إيجابياً على مدى استجابة الكمية المعروضة للتغير في سعرها."},
+            {"id": 56, "page": 15, "category": "العوامل المحددة للعرض", "q": "ما هو المثال الذي ذكرته الملزمة للسلع التي تستخدم 'مستلزمات عامة' يسهل تحويلها؟", "options": ["صناعة إطارات السيارات", "صناعة المعجنات والحلويات التي تستخدم الدقيق والدهون والسكر", "استخراج النفط الخام", "صناعة الطائرات"], "correct": 1, "hint": "الطحين والدهن والشكر يدخلون بكل أنواع المعجنات والحلويات.", "explanation": "في ص 15، من أمثلة السلع التي تستخدم مستلزمات عامة صناعة المعجنات والحلويات التي تستخدم الدقيق والدهون والسكر."},
+            {"id": 57, "page": 15, "category": "العوامل المحددة للعرض", "q": "إذا كان إنتاج سلعة يتطلب استخدام 'مستلزمات معينة ومحددة'، فما أثر ذلك على استجابة الكمية المعروضة؟ وما مثاله؟", "options": ["يزيد الاستجابة، ومثاله الحلويات", "يقلص من إمكانية تحويل تلك المستلزمات أو مناقلتها فيؤثر سلباً على استجابة الكمية المعروضة، ومثاله صناعة إطارات السيارات التي تستخدم المطاط", "يجعل العرض لانهائي المرونة", "يخفض تكلفة الإنتاج إلى الصفر"], "correct": 1, "hint": "المطاط خاص بالتواير، فصعب تناقله لغير صناعة، وهذا يأثر سلبياً على استجابة العرض.", "explanation": "في ص 15، استخدام مستلزمات معينة ومحددة يقلص من إمكانية تحويلها أو مناقلتها ويؤثر سلباً على مدى استجابة الكمية المعروضة، ومثاله صناعة إطارات السيارات التي تستخدم المطاط."},
+            {"id": 58, "page": 15, "category": "العوامل المحددة للعرض", "q": "كيف يؤثر 'تحسن الفن الإنتاجي' (تقنية الإنتاج) على إمكانات عرض السلعة؟", "options": ["يرفع التكلفة المتوسطة ويقلل العرض", "يؤدي إلى تخفيض التكلفة المتوسطة لإنتاج وحدة السلعة، مما يؤثر إيجابياً على مدى استجابة الكمية المعروضة", "لا يؤثر على التكلفة إطلاقاً", "يلغي الحاجة إلى النقل"], "correct": 1, "hint": "التكنولوجيا الحديثة تقلل التكلفة وتخلي الإنتاج أسرع وأكبر (تأثير إيجابي).", "explanation": "تذكر ص 15 (النقطة 2) أن تحسن الفن الإنتاجي يؤدي إلى تخفيض التكلفة المتوسطة لإنتاج وحدة السلعة، الأمر الذي يؤثر إيجابياً على مدى استجابة الكمية المعروضة (ويحصل العكس عند تقادم التقنية)."},
+            {"id": 59, "page": 15, "category": "العوامل المحددة للعرض", "q": "كيف تنظر النظرية الاقتصادية إلى 'إمكانات النقل' في سياق العوامل المحددة للعرض؟", "options": ["تعتبرها منفصلة تماماً عن الإنتاج", "تعتبرها جزءاً مكملاً لعملية الإنتاج وامتداداً لتقنية أو فن الإنتاج وتؤثر بنفس النسق على إمكانات عرض أو إيصال السلعة", "تعتبرها ضريبة غير مباشرة", "تعتبرها من عوامل الطلب فقط"], "correct": 1, "hint": "النقل يكمل شغل المعمل لأنه يوصل البضاعة للسوك، فهو امتداد لتقنية الإنتاج.", "explanation": "في ص 15، ما دامت إمكانات النقل تعتبر جزءاً مكملاً لعملية الإنتاج، فهي تمثل امتداداً لتقنية أو فن الإنتاج وتؤثر بنفس النسق على إمكانات عرض أو إيصال السلعة."},
+            {"id": 60, "page": 15, "category": "العوامل المحددة للعرض", "q": "بخصوص 'الفترة الزمنية اللازمة للمواءمة'، كيف يمكن تحقيق (بعض الزيادة) في الإنتاج سريعاً عند ارتفاع السعر دون تغيير المعدات الثابتة؟", "options": ["من خلال زيادة كمية بعض المدخلات المتغيرة مثل استخدام أعداد إضافية من الأيدي العاملة أو زيادة وجبات (فترات) العمل", "بناء مصانع عملاقة خلال يوم واحد", "إغلاق خطوط الإنتاج", "تقليل عدد العمال"], "correct": 0, "hint": "بالأجل القصير ما تكدر تبني معمل جديد، بس تكدر تشغل عمال إضافيين أو تفتح شفت مسائي (وجبات عمل).", "explanation": "في ص 15 (النقطة 3)، زيادة السعر يمكن أن تؤدي إلى بعض الزيادة في الإنتاج من خلال زيادة كمية بعض المدخلات مثل استخدام أعداد إضافية من الأيدي العاملة أو زيادة وجبات (فترات) العمل."},
+            {"id": 61, "page": 15, "category": "العوامل المحددة للعرض", "q": "متى يمكن تحقيق 'زيادات كبيرة أو مهمة' في الإنتاج استجابة لارتفاع السعر؟", "options": ["بمجرد تغيير لون التغليف", "لا يمكن ذلك إلا أن تحصل زيادات في مقادير المستلزمات ومعدات الإنتاج الثابتة (كالآلات والمكائن والمنشآت) وهو ما يحتاج لفترات زمنية كافية", "خلال ساعة واحدة من ارتفاع السعر", "عند الاستغناء عن المكائن"], "correct": 1, "hint": "الزيادة الجبيرة بالإنتاج تحتاج مكائن ومنشآت جديدة (مستلزمات ثابتة)، وهاي تحتاج وكت كافي.", "explanation": "تؤكد ص 15 أنه من غير الممكن تحقيق زيادات كبيرة أو مهمة في الإنتاج إلى أن تحصل زيادات في مقادير المستلزمات الثابتة (الآلات والمكائن والمنشآت) وهو ما يحتاج لمرور فترات زمنية كافية."},
+            {"id": 62, "page": 15, "category": "العوامل المحددة للعرض", "q": "لماذا قد لا يكون من المجدي اقتصادياً قيام المشروع بزيادة معدات الإنتاج والمنشآت الثابتة فوراً بعد ارتفاع سعر السلعة؟", "options": ["لأن الآلات مجانية", "لأن زيادة المعدات تنطوي على زيادات في التكاليف الثابتة، فإذا كان ارتفاع السعر مؤقتاً فلن يكون ذلك مجدياً أو مربحاً اقتصادياً", "لأن زيادة السعر دائماً أبدية", "لأن التكاليف الثابتة تنخفض عند شراء الآلات"], "correct": 1, "hint": "إذا السعر صعد يومين ويرجع ينزل (مؤقت)، ما يسوى تشتري مكائن غالية وتورط روحك بتكاليف ثابتة!", "explanation": "في نهاية ص 15، زيادة الكمية المعروضة عبر المعدات تنطوي على زيادات في التكاليف الثابتة، فإذا كان من المحتمل أن تكون زيادة السعر مؤقتة، فقد لا يكون من المجدي اقتصادياً زيادة المعدات والمنشآت الثابتة."},
+
+            // ==================== ص 16 ====================
+            {"id": 63, "page": 16, "category": "العوامل المحددة للعرض", "q": "كيف تؤثر 'قابلية السلعة للتخزين' على استجابة الكمية المعروضة عند انخفاض سعر السلعة؟", "options": ["تجبر المنتج على بيع كل بضاعته بخسارة", "إذا كانت إمكانات التخزين متاحة، فإن انخفاض السعر يؤدي إلى تقليل الكمية المعروضة عن طريق سحب بعض الكميات من السوق وتخزينها", "تزيد الكمية المعروضة في السوق", "لا علاقة للتخزين بالكمية المعروضة"], "correct": 1, "hint": "إذا البضاعة تنخزن وما تخرب، من يرخص السعر التاجر يلمها من السوك ويضمها بالمخزن فيقل العرض.", "explanation": "توضح ص 15 و 16 أنه إذا كانت إمكانات التخزين متاحة، فإن انخفاض سعر السلعة يؤدي إلى تقليل الكمية المعروضة عن طريق سحب بعض الكميات من السوق وتخزينها."},
+            {"id": 64, "page": 16, "category": "العوامل المحددة للعرض", "q": "في أي أجل تبدو إمكانات التخزين أكثر وضوحاً؟ وعلى ماذا تتوقف؟", "options": ["في الأجل الطويل جداً فقط", "تبدو أكثر وضوحاً في الأجل القصير، وتتفاوت حسب طبيعة السلعة وقابليتها للتلف", "تتساوى في جميع السلع دون استثناء", "تظهر في الخدمات غير الملموسة فقط"], "correct": 1, "hint": "التخزين يفيد بالأجل القصير، ويعتمد على السلعة (التفاح والطماطة مو مثل الحديد!).", "explanation": "تذكر ص 16 أن إمكانات التخزين تبدو أكثر وضوحاً في الأجل القصير، وتتفاوت حسب طبيعة السلعة وقابليتها للتلف."},
+            {"id": 65, "page": 16, "category": "الإعانات والضرائب", "q": "ما هو أثر قيام الجهات الرسمية بزيادة مستوى 'الإعانات' الممنوحة لإنتاج سلعة معينة؟", "options": ["ارتفاع تكلفة الإنتاج بمقدار الإعانة", "تخفيض تكلفة الإنتاج بمقدار يساوي مبلغ الإعانة، مما يؤثر إيجابياً على مدى استجابة الكمية المعروضة", "تخفيض الكمية المعروضة في السوق", "إلغاء العلاقة الطردية للعرض"], "correct": 1, "hint": "الإعانة دعم مالي من الدولة للمنتج، فتقلل عليه التكلفة بقد مبلغ الإعانة وتشجعه يعرض أكثر.", "explanation": "في ص 16 (النقطة 4)، زيادة مستوى الإعانات تعني تخفيض تكلفة الإنتاج بمقدار يساوي مبلغ الإعانة، الأمر الذي يؤثر إيجابياً على مدى استجابة الكمية المعروضة."},
+            {"id": 66, "page": 16, "category": "الإعانات والضرائب", "q": "كيف تؤثر زيادة 'الضرائب المفروضة' على إنتاج سلعة معينة؟", "options": ["تؤثر بشكل مضاد للإعانات، فترفع تكلفة إنتاج السلعة بمقدار يساوي حجم الضريبة المفروضة وتؤثر سلباً على الكمية المعروضة", "تخفض تكلفة الإنتاج وتزيد العرض", "لا تؤثر على تكلفة الإنتاج", "تزيد من أرباح المنتج الصافية"], "correct": 0, "hint": "الضريبة عكس الإعانة: تاخذ فلوس من المنتج فتزيد عليه التكلفة بقد الضريبة وتقلل العرض.", "explanation": "في ص 16، تؤثر الضرائب بشكل مضاد للإعانات، فزيادة الضريبة تعني ارتفاع تكلفة إنتاج السلعة بمقدار يساوي حجم الضريبة المفروضة (وبالعكس في حالة تخفيضها)."},
+            {"id": 67, "page": 16, "category": "مرونة العرض", "q": "لماذا لا تحقق الكميات المعروضة من السلع المختلفة نفس الدرجة من الاستجابة للتغير في سعر السلعة؟", "options": ["لأن قانون العرض لا ينطبق على السلع الاعتيادية", "لأن العوامل الأخرى المحددة لمنحنى العرض تتفاوت من حيث تأثيرها على السلع المختلفة", "لأن جميع السلع لها نفس تكلفة الإنتاج", "لأن الأسعار لا تتغير أبداً"], "correct": 1, "hint": "كل سلعة ظروفها وموادها وتخزينها يختلف، فلذلك استجابتها (مرونتها) تختلف.", "explanation": "توضح ص 16 (رابعاً: مرونة العرض) أن السبب في اختلاف درجة الاستجابة هو أن العوامل الأخرى المحددة لمنحنى العرض تتفاوت من حيث تأثيرها على السلع المختلفة."},
+            {"id": 68, "page": 16, "category": "مرونة العرض", "q": "ما هو الفرق الوحيد بين فكرة مرونة العرض (Es) وفكرة مرونة الطلب (Ed)؟", "options": ["طريقة الحساب الرياضي مختلفة كلياً", "أن الكمية المعروضة تستجيب طردياً للتغير في السعر، في حين أن الكمية المطلوبة تستجيب عكسياً", "أن مرونة العرض تقيس استجابة السعر للتغير في الدخل", "لا توجد أي علاقة أو تشابه بينهما"], "correct": 1, "hint": "نفس القانون بالضبط، بس العرض استجابته طردية (+) والطلب استجابته عكسية (-).", "explanation": "تؤكد ص 16 أن فكرة مرونة العرض تماثل مرونة الطلب، والفرق الوحيد هو أن الكمية المعروضة تستجيب طردياً للتغير في السعر بينما الكمية المطلوبة تستجيب عكسياً."},
+            {"id": 69, "page": 16, "category": "مرونة العرض", "q": "ما هي الصيغة الرياضية الصحيحة لاحتساب مرونة العرض السعرية (Es)؟", "options": ["Es = (P2 - P1) / (Q2 - Q1) × (Q1 / P1)", "Es = (Q2 - Q1) / (P2 - P1) × (P1 / Q1)", "Es = Q1 × P1", "Es = (Q2 + Q1) / (P2 + P1)"], "correct": 1, "hint": "التغير بالكمية على التغير بالسعر مضروباً في (السعر الأول على الكمية الأولى).", "explanation": "في ص 16، صيغة احتساب مرونة العرض هي: Es = %ΔQs / %ΔP = (Q2 - Q1)/(P2 - P1) × (P1 / Q1)."},
+            {"id": 70, "page": 16, "category": "مرونة العرض", "q": "في صيغة مرونة العرض، إلى ماذا يرمز كل من (Q1) و (P1)؟", "options": ["الكمية المعروضة حالياً والسعر الحالي", "الكمية المعروضة سابقاً (المبدئية) وسعر السلعة سابقاً (المبدئي)", "كمية الطلب وسعر التوازن", "الكمية المخزونة والتكلفة الحدية"], "correct": 1, "hint": "رقم 1 يعني القديم (السابق أو المبدئي)، ورقم 2 يعني الجديد (الحالي).", "explanation": "تذكر ص 16 أن Q1 تمثل الكمية المعروضة سابقاً (المبدئية)، و P1 تمثل سعر السلعة سابقاً (المبدئي)، بينما Q2 و P2 تمثلان الكمية والسعر حالياً."},
+
+            // ==================== ص 17 ====================
+            {"id": 71, "page": 17, "category": "حساب مرونة العرض", "q": "إذا كانت الكمية المعروضة السابقة (Q1 = 100) والحالية (Q2 = 150)، وكان السعر السابق (P1 = 4) دولار والحالي (P2 = 5) دولار، فكم تبلغ مرونة العرض (Es)؟", "options": ["0.5", "1", "2", "4"], "correct": 2, "hint": "(150 - 100) / (5 - 4) × (4 / 100) = 50 × 4 / 100 = 200 / 100 = 2.", "explanation": "في مطلع ص 17، بتطبيق الصيغة: Es = (50 / 1) × (4 / 100) = 200 / 100 = 2."},
+            {"id": 72, "page": 17, "category": "حساب مرونة العرض", "q": "ماذا تعني النتيجة (Es = 2) في مثال مرونة العرض السابق؟", "options": ["أن السعر يتغير بنسبة 2% عندما تتغير الكمية بنسبة 1%", "أن الكمية المعروضة تتغير بنسبة (2%) عندما يتغير سعر السلعة بنسبة (1%)", "أن العرض عديم المرونة", "أن الكمية المعروضة ثابتة عند 200 وحدة"], "correct": 1, "hint": "كل 1% تغير بالسعر يقابله 2% تغير بالكمية المعروضة.", "explanation": "توضح ص 17 أن النتيجة تعني أن معامل المرونة يبلغ (2)، أي أن الكمية المعروضة تتغير بنسبة (2%) عندما يتغير سعر السلعة بنسبة (1%)."},
+            {"id": 73, "page": 17, "category": "حالات مرونة العرض", "q": "كم عدد حالات مرونة العرض التي يمكن تشخيصها استناداً إلى حاصل قسمة التغير النسبي في الكمية المعروضة على التغير النسبي في السعر؟", "options": ["ثلاث حالات فقط", "أربع حالات", "خمس حالات", "سبع حالات"], "correct": 2, "hint": "خمس حالات: عالي المرونة، أحادي، واطئ، عديم، ولانهائي المرونة.", "explanation": "في ص 17، يمكن تشخيص خمس حالات لمرونة العرض استناداً إلى حاصل قسمة التغير النسبي في الكمية المعروضة على التغير النسبي في السعر."},
+            {"id": 74, "page": 17, "category": "حالات مرونة العرض", "q": "متى يوصف العرض بأنه 'عرض مرن أو عالي المرونة' (Es > 1)؟", "options": ["عندما يؤدي التغير النسبي في السعر إلى تغير نسبي أكبر في الكمية المعروضة", "عندما يؤدي التغير النسبي في السعر إلى تغير نسبي أقل في الكمية المعروضة", "عندما لا تتغير الكمية المعروضة إطلاقاً", "عندما يتساوى التغير النسبي في السعر والكمية"], "correct": 0, "hint": "عالي المرونة يعني استجابة الكمية المعروضة أكبر من نسبة تغير السعر (مثل 2% مقابل 1%).", "explanation": "تذكر ص 17 (الحالة 1) أنه في العرض العالي المرونة (Es > 1) يؤدي التغير النسبي في السعر إلى تغير نسبي أكبر في الكمية المعروضة."},
+            {"id": 75, "page": 17, "category": "حالات مرونة العرض", "q": "هندسياً، كيف يبدو منحنى العرض عندما يكون 'عالي المرونة' (Es > 1) كما في الشكل (3)؟", "options": ["يكون عمودياً تماماً", "يقترب من (أو ينكفئ على) المحور الأفقي، وتكون الزاوية بين المحور السيني والمنحنى أصغر من الزاوية بين المنحنى والمحور العمودي", "يقترب من المحور العمودي بشدة", "ينبع من نقطة الأصل بزاوية 45 درجة"], "correct": 1, "hint": "يميل وينكفئ على محور الكمية (الأفقي) بحيث زاويته جوه ويا المحور السيني تكون زغيرة.", "explanation": "في ص 17، في حالة العرض عالي المرونة (Es > 1) يقترب منحنى العرض من (أو ينكفئ على) المحور الأفقي، بحيث تصبح الزاوية المحصورة بين المحور السيني ومنحنى العرض أصغر من الزاوية المحصورة بينه وبين المحور العمودي."},
+            {"id": 76, "page": 17, "category": "حالات مرونة العرض", "q": "متى تكون درجة مرونة عرض السلعة مساوية للواحد الصحيح (Es = 1) أي 'عرض متكافئ (أحادي) المرونة'؟", "options": ["عندما يؤدي التغير النسبي في السعر إلى تغير نسبي مماثل (مساوٍ) له في الكمية المعروضة", "عندما تكون الكمية المعروضة صفراً", "عندما يزيد العرض بنسبة 50% لتغير السعر 10%", "عندما يكون المنحنى موازياً للمحور الأفقي"], "correct": 0, "hint": "متكافئ يعني نفس النسبة بالضبط: السعر يصعد 10%، الكمية المعروضة تصعد 10%.", "explanation": "في ص 17 (الحالة 2)، في العرض المتكافئ (أحادي) المرونة يؤدي التغير النسبي في السعر إلى تغير نسبي مماثل (مساوٍ) له في الكمية المعروضة، فتكون Es = 1."},
+            {"id": 77, "page": 17, "category": "حالات مرونة العرض", "q": "كيف يتمثل هندسياً منحنى العرض 'أحادي (متكافئ) المرونة' (Es = 1) في الشكل (4)؟", "options": ["خط مستقيم ينبع من نقطة الأصل ويقسم زاوية الأصل إلى زاويتين متساويتين كل منهما (45) درجة", "عمود قائم بزاوية 90 درجة", "خط أفقي بزاوية صفر", "منحنى يتجه من أعلى اليسار لأسفل اليمين"], "correct": 0, "hint": "يطلع من الصفر (نقطة الأصل) ويقسم الزاوية بالنص: 45 درجة بـ 45 درجة.", "explanation": "توضح ص 17 أن منحنى العرض أحادي المرونة يتمثل في خط مستقيم ينبع من نقطة الأصل ويقسم زاوية الأصل إلى زاويتين متساويتين، كل منهما (45) درجة."},
+
+            // ==================== ص 18 ====================
+            {"id": 78, "page": 18, "category": "حالات مرونة العرض", "q": "في حالة 'العرض واطئ المرونة (غير مرن)' (Es < 1)، ماذا يحدث إذا ارتفع سعر السلعة بنسبة (20%)؟", "options": ["تزداد الكمية المعروضة بنسبة أكبر من 20%", "تزداد الكمية المعروضة بنسبة أقل (مثلاً 10%، فتكون المرونة 1/2 أي أقل من الواحد الصحيح)", "تبقى الكمية ثابتة عند الصفر", "تنخفض الكمية المعروضة بنسبة 20%"], "correct": 1, "hint": "واطئ المرونة يعني استجابته ضعيفة: السعر يصعد 20% بس الكمية تزيد 10% بس!", "explanation": "في ص 18 (الحالة 3)، في العرض واطئ المرونة (Es < 1) يؤدي التغير النسبي في السعر إلى تغير نسبي أقل في الكمية المعروضة؛ فإذا ارتفع السعر 20% وازدادت الكمية 10% فإن المرونة تساوي 1/2."},
+            {"id": 79, "page": 18, "category": "حالات مرونة العرض", "q": "هندسياً، كيف يبدو منحنى العرض 'واطئ المرونة' (Es < 1) في الشكل (5)؟", "options": ["ينكفئ على المحور الأفقي", "يصبح أشد انحداراً، وتصبح الزاوية المحصورة بين المحور السيني ومنحنى العرض أكبر نسبياً", "يقسم زاوية الأصل إلى 45 درجة", "يكون خطاً أفقياً"], "correct": 1, "hint": "يصير واكف أكثر (أشد انحداراً) وزاويته ويا المحور السيني تكبر.", "explanation": "تذكر ص 18 أنه في العرض واطئ المرونة يصبح منحنى العرض أشد انحداراً، وتصبح الزاوية المحصورة بين المحور السيني ومنحنى العرض أكبر نسبياً."},
+            {"id": 80, "page": 18, "category": "حالات مرونة العرض", "q": "ماذا تمثل حالة 'العرض عديم المرونة تماماً' (Es = 0)؟", "options": ["الحالة التي تظل فيها الكمية المعروضة ثابتة رغم تغير سعر السلعة", "الحالة التي يثبت فيها السعر وتتغير الكمية إلى ما لا نهاية", "الحالة التي تتساوى فيها نسبة تغير السعر والكمية", "الحالة التي ينعدم فيها الإنتاج تماماً"], "correct": 0, "hint": "عديم المرونة يعني الكمية المعروضة قافلة وثابتة مهما صعد أو نزل السعر.", "explanation": "في ص 18 (الحالة 4)، يمثل العرض عديم المرونة تماماً الحالة التي تظل فيها الكمية المعروضة ثابتة رغم تغير سعر السلعة، أي أن Es = 0."},
+            {"id": 81, "page": 18, "category": "حالات مرونة العرض", "q": "كيف يُعبر بيانياً عن 'العرض عديم المرونة تماماً' (Es = 0) في الشكل (6)؟", "options": ["خط أفقي موازٍ للمحور السيني", "عمود قائم على المحور الأفقي (السيني) يعكس ثبات الكمية المعروضة في الأمد القصير", "خط بزاوية 45 درجة", "منحنى مقعر"], "correct": 1, "hint": "عمود واكف عدل على المحور الأفقي لأن الكمية Q ثابتة.", "explanation": "توضح ص 18 أنه يُعبر عن العرض عديم المرونة (Es = 0) من خلال عمود قائم على المحور الأفقي (السيني) الذي يعني ثبات الكمية المعروضة في الأمد القصير مهما تغير السعر."},
+            {"id": 82, "page": 18, "category": "حالات مرونة العرض", "q": "ما هو المثال الواقعي المحدود الذي ذكرته الملزمة لحالة 'العرض عديم المرونة تماماً' (Es = 0) في الأمد القصير؟", "options": ["عرض المعجنات والحلويات", "عرض الأرض - كعنصر إنتاجي - في الأمد القصير", "عرض الملابس الجاهزة", "عرض إطارات السيارات"], "correct": 1, "hint": "مساحة الأرض المتاحة بالبلد ثابتة بالأمد القصير ما تكدر تزيدها حتى لو غلت أسعارها.", "explanation": "في ص 18، من الأمثلة المحدودة على العرض عديم المرونة هو عرض الأرض - كعنصر إنتاجي - في الأمد القصير."},
+            {"id": 83, "page": 18, "category": "حالات مرونة العرض", "q": "عن أية حالة يعبر 'العرض لانهائي المرونة' (Es = ∞)، وكيف يُرسم بيانياً؟", "options": ["يعبر عن ثبات الكمية، ويُرسم كعمود قائم", "يعبر عن استعداد المنتجين لعرض أية كمية من السلعة بالسعر السائد، ويُرسم كخط أفقي موازٍ للمحور السيني", "يعبر عن رفض المنتجين للبيع، ويُرسم كنقطة", "يعبر عن زاوية 45 درجة"], "correct": 1, "hint": "خط أفقي عدل موازي لمحور الكمية: بالسعر السائد شكد ما يطلب السوك، المنتجون مستعدين يعرضون.", "explanation": "في نهاية ص 18، يعبر العرض لانهائي المرونة عن الحالة التي يكون فيها المنتجون على استعداد لعرض أية كمية بالسعر السائد، ويُعبر عنه بخط أفقي موازٍ للمحور السيني."},
+            {"id": 84, "page": 18, "category": "حالات مرونة العرض", "q": "في حالة 'العرض لانهائي المرونة'، ماذا يحدث للكمية المعروضة إذا انخفض السعر عن المستوى السائد أو ارتفع أعلى منه؟", "options": ["عند سعر أدنى تنخفض الكمية المعروضة إلى الصفر، وإذا ارتفع السعر أعلى من ذلك تزداد الكمية المعروضة إلى ما لا نهاية", "لا تتأثر الكمية المعروضة أبداً", "تزداد الكمية عند انخفاض السعر", "تثبت الكمية عند 100 وحدة"], "correct": 0, "hint": "جوه هذا السعر محد يبيع (صفر)، وفوكاه يعرضون للما لا نهاية!", "explanation": "تذكر ص 18 أنه عند انخفاض السعر تنخفض الكمية المعروضة إلى الصفر، أما إذا ارتفع السعر أعلى من ذلك فإن الكمية المعروضة تزداد إلى ما لا نهاية."},
+
+            // ==================== ص 19 ====================
+            {"id": 85, "page": 19, "category": "خصائص منحنى العرض", "q": "هل يُشترط بالضرورة أن يكون منحنى العرض خطاً مستقيماً في الواقع؟ ولماذا قُدمت الأشكال كخطوط مستقيمة؟", "options": ["نعم، يجب أن يكون خطاً مستقيماً دائماً", "لا يُشترط بالضرورة أن يكون خطاً مستقيماً، والأشكال السابقة كان الغرض منها تقديم صورة مبسطة", "نعم، إلا في حالة الأرض", "لا يكون مستقيماً إلا في الأجل الطويل"], "correct": 1, "hint": "الخط المستقيم بالرسومات مجرد للتبسيط والتوضيح، مو شرط بالواقع يكون مستقيم.", "explanation": "تشير ص 19 إلى أن منحنى العرض لا يشترط بالضرورة أن يكون خطاً مستقيماً، وإنما الغرض من الأشكال السابقة تقديم صورة مبسطة."},
+            {"id": 86, "page": 19, "category": "قياس مرونة العرض", "q": "هل تختلف منهجية وآلية قياس مرونة العرض عن قياس مرونة الطلب (سواء في مرونة النقطة أو مرونة القوس)؟", "options": ["نعم، تختلف اختلافاً جذرياً", "لا تختلف عن منهجية وآلية قياس مرونة الطلب سواء ما يتصل بمرونة النقطة أو مرونة القوس أو غيرها", "لا يمكن قياس مرونة النقطة للعرض", "تطبق مرونة القوس فقط على العرض"], "correct": 1, "hint": "نفس القوانين والآليات مال مرونة النقطة والقوس نطبقها عالعرض بدون اختلاف.", "explanation": "تؤكد ص 19 أن قياس مرونة العرض لا تختلف عن منهجية وآلية قياس مرونة الطلب، سواء ما يتصل بمرونة النقطة أو مرونة القوس أو غيرها."},
+            {"id": 87, "page": 19, "category": "التغير في الكمية المعروضة", "q": "في الأمد القصير وبافتراض ثبات المعطيات الأخرى، عن ماذا يعبر التحرك على منحنى العرض الواحد (الشكل 8: من P1,Q1 إلى P2,Q2)؟", "options": ["يعبر عن التغير في العرض (انتقال المنحنى)", "يعبر عن التغير في الكمية المعروضة، أي مقدار الكمية المعروضة مقابل كل مستوى من مستويات السعر", "يعبر عن انخفاض الطلب", "يعبر عن تغير تقنية الإنتاج"], "correct": 1, "hint": "مادام على نفس المنحنى الواحد وبسبب السعر بس، نسميه (التغير في الكمية المعروضة).", "explanation": "توضح ص 19 أن منحنى العرض الواحد بدرجة مرونة معينة في الأمد القصير يعبر عن التغير في الكمية المعروضة مقابل كل مستوى من مستويات السعر."},
+            {"id": 88, "page": 19, "category": "التغير في العرض", "q": "لماذا لا يظل منحنى العرض على نفس الدرجة من المرونة أو في نفس الموقع في الأمد المتوسط أو البعيد؟", "options": ["لأن السعر يثبت للأبد", "لأن المعطيات أو العوامل الأخرى المؤثرة على إمكانات العرض (كأسعار المستلزمات، تقنية الإنتاج، الإعانات والضرائب) يمكن أن تتغير في الأمد المتوسط أو البعيد", "لأن المستهلكين يتوقفون عن الشراء", "لأن قانون العرض يُلغى في الأجل الطويل"], "correct": 1, "hint": "بالأمد المتوسط والبعيد، التكنولوجيا والضرائب وأسعار المواد تتغير، فيتغير المنحنى بكبره!", "explanation": "في ص 19، لا يظل منحنى العرض على نفس الدرجة لأن المعطيات أو العوامل الأخرى (أسعار المستلزمات وتوفرها، تقنية الإنتاج، الإعانات والضرائب) يمكن أن تتغير في الأمد المتوسط أو البعيد."},
+            {"id": 89, "page": 19, "category": "التغير في العرض", "q": "ماذا يعني تحسن أو تراجع إمكانات العرض في الأمد المتوسط أو البعيد بالنسبة لمنحنى العرض؟", "options": ["بقاء المنحنى في مكانه", "حصول تحول (انتقال) في منحنى العرض إلى اليمين أو إلى اليسار", "تحول منحنى العرض إلى منحنى طلب", "ثبات الكمية المعروضة عند نفس السعر"], "correct": 1, "hint": "من تتحسن الإمكانات يزحف المنحنى لليمين، ومن تتراجع يزحف لليسار.", "explanation": "تذكر ص 19 أن تحسن أو تراجع إمكانات العرض يعني حصول تحول في منحنى العرض إلى اليمين أو إلى اليسار."},
+            {"id": 90, "page": 19, "category": "التغير في العرض", "q": "عند حصول تحول في منحنى العرض، تتغير إمكانات العرض في ظل نفس السعر (P1) من (Q1) إلى (Q2) أو إلى (Q3). ماذا نسمي هذه الحالة؟", "options": ["التغير في الكمية المعروضة", "التغير في العرض (Change in Supply)", "توازن السوق", "مرونة القوس"], "correct": 1, "hint": "السعر P1 ثابت بس المنحنى كله انتقل وتغيرت الكميات، هذا هو (التغير في العرض).", "explanation": "توضح نهاية ص 19 ومطلع ص 20 أن تغير الكميات من Q1 إلى Q2 أو Q3 في ظل نفس السعر P1 عبر عدة منحنيات يعني أننا بصدد (التغير في العرض)."},
+
+            // ==================== ص 20 + أسئلة ربط استنتاجية شاملة ====================
+            {"id": 91, "page": 20, "category": "التغير في العرض", "q": "عندما نكون بصدد 'التغير في العرض' (شكل 9 ص 20)، كيف يتم التعرف على العلاقة بين السعر والكمية؟", "options": ["على منحنى واحد للعرض فقط", "يصبح من غير الممكن التعرف عليها على منحنى واحد، بل من خلال عدة منحنيات للعرض (S1, S2, S3)", "من خلال منحنى الطلب فقط", "من خلال نقطة الأصل فقط"], "correct": 1, "hint": "لأن المنحنى انتقل، فما نكدر نقراها على خط واحد، لازم نشوف عدة منحنيات (S1 و S2 و S3).", "explanation": "تنص ص 20 على أنه يصبح من غير الممكن التعرف على العلاقة بين السعر والكمية على منحنى واحد للعرض، بل من خلال عدة منحنيات للعرض، أي أننا بصدد التغير في العرض."},
+            {"id": 92, "page": 20, "category": "التغير في العرض", "q": "في الشكل (9) في ص 20، ماذا يمثل انتقال منحنى العرض من (S1) إلى جهة اليمين (S2) عند نفس السعر (P1)؟", "options": ["زيادة في العرض (تحسن إمكانات العرض) حيث زادت الكمية من Q1 إلى Q2 عند نفس السعر P1", "نقصان في العرض وتراجع الكمية إلى Q3", "تغير في الكمية المعروضة بسبب ارتفاع السعر", "انخفاض في الإعانات الحكومية"], "correct": 0, "hint": "الانتقال لليمين (S2) خلى الكمية تكبر من Q1 إلى Q2 بنفس السعر P1، يعني زيادة بالعرض.", "explanation": "يظهر من الشكل (9) في ص 20 أن تحول المنحنى لليمين من S1 إلى S2 عند السعر الثابت P1 ينقل الكمية من Q1 إلى Q2 (زيادة في العرض لتحسن إمكاناته)."},
+            {"id": 93, "page": 20, "category": "التغير في العرض", "q": "في الشكل (9) في ص 20، ماذا يمثل انتقال منحنى العرض من (S1) إلى جهة اليسار (S3) عند نفس السعر (P1)؟", "options": ["زيادة في العرض", "تراجع إمكانات العرض (نقصان العرض) حيث انخفضت الكمية من Q1 إلى Q3 عند نفس السعر P1", "تحسن في تقنية الإنتاج", "انخفاض في أسعار المستلزمات"], "correct": 1, "hint": "الانتقال لليسار (S3) قلل الكمية من Q1 إلى Q3 بنفس السعر، يعني تراجع ونقصان بالعرض.", "explanation": "في الشكل (9) ص 20، تحول المنحنى إلى اليسار (S3) يقلص الكمية من Q1 إلى Q3 عند نفس السعر P1 نتيجة تراجع إمكانات العرض."},
+            {"id": 94, "page": 20, "category": "مقارنة شاملة (ص 15-20)", "q": "أي من التغيرات التالية يؤدي إلى انتقال منحنى العرض من (S1) إلى (S2) جهة اليمين كما في الشكل (9) ص 20؟", "options": ["فرض ضرائب جديدة على الإنتاج", "تحسن تقنية الإنتاج أو زيادة الإعانات الحكومية أو انخفاض أسعار المستلزمات", "تقادم المكائن وارتفاع أجور النقل", "تغير سعر السلعة نفسها في الأجل القصير"], "correct": 1, "hint": "شكو شي يقلل تكلفة الإنتاج (تكنولوجيا، إعانات، رخص مواد) يحسن العرض ويدفع المنحنى لليمين S2.", "explanation": "بالربط بين العوامل المحددة للعرض (ص 15-16) والشكل (9) في ص 20، فإن تحسن التقنية أو زيادة الإعانات أو انخفاض أسعار المستلزمات يخفض التكلفة ويحسن إمكانات العرض فينتقل المنحنى لليمين (S2)."},
+            {"id": 95, "page": 20, "category": "مقارنة شاملة (ص 15-20)", "q": "أي من التغيرات التالية يؤدي إلى انتقال منحنى العرض من (S1) إلى (S3) جهة اليسار كما في الشكل (9) ص 20؟", "options": ["زيادة الضرائب المفروضة أو ارتفاع أسعار مستلزمات الإنتاج", "منح إعانات حكومية سخية للمنتجين", "تطور وسائل النقل وتخفيض كلفتها", "ارتفاع سعر السلعة نفسها فقط"], "correct": 0, "hint": "الضرائب وغلاء المواد ترفع التكلفة وتضعف العرض، فيرجع المنحنى لليسار S3.", "explanation": "بالربط بين ص 15-16 وص 20، زيادة الضرائب أو ارتفاع أسعار المستلزمات يرفع تكلفة الإنتاج ويقلص إمكانات العرض فينتقل المنحنى لليسار (S3)."},
+            {"id": 96, "page": 19, "category": "مقارنة شاملة (ص 19-20)", "q": "عند المقارنة بين الشكل (8: تغير الكمية المعروضة) والشكل (9: تغير منحنى العرض)، ما هو الفرق الأساسي في متغير السعر (P)؟", "options": ["في الشكل 8 يتغير السعر من P1 إلى P2 على نفس المنحنى، بينما في الشكل 9 يثبت السعر عند P1 وتتغير المنحنيات", "في الشكل 8 يثبت السعر وفي الشكل 9 يتغير السعر", "السعر متغير في الشكلين بنفس الطريقة", "لا يوجد سعر في الشكل 9"], "correct": 0, "hint": "بـ شكل 8 السعر صعد من P1 لـ P2 على نفس الخط، بس بـ شكل 9 السعر بقى P1 والخطوط هي اللي تحركت!", "explanation": "يظهر بوضوح من مقارنة الشكل (8) ص 19 والشكل (9) ص 20 أن تغير الكمية المعروضة يحدث بتغير السعر من P1 إلى P2 على منحنى واحد، بينما تغير العرض يحدث في ظل نفس السعر P1 بانتقال المنحنى."},
+            {"id": 97, "page": 11, "category": "مسألة تدريبية (مرونة النقطة)", "q": "تطبيقاً لقانون مرونة النقطة الهندسي (ص 10-11): إذا كان طول خط الطلب الكلي على المحور الأفقي يبلغ (40) وحدة، فكم تبلغ مرونة النقطة الواقعة عند الكمية (10)؟", "options": ["0.33", "1", "3 (لأن الجزء الأيمن 30 / الجزء الأيسر 10 = 3)", "4"], "correct": 2, "hint": "الخط كله 40، وأنت واكف عند الـ 10.. يعني على يمينك بقى 30، وعلى يسارك 10. اقسم 30 على 10 يطلع 3!", "explanation": "بتطبيق قانون (الجزء الأيمن / الجزء الأيسر) من ص 10-11: الجزء الأيمن = 40 - 10 = 30، والجزء الأيسر = 10، إذن Ed = 30 / 10 = 3."},
+            {"id": 98, "page": 8, "category": "مسألة تدريبية (الإيراد الحدي)", "q": "تطبيقاً لمعادلة الإيراد الحدي (ص 8): إذا كان سعر السلعة (P = 10) ومعامل مرونة الطلب السعرية (Ed = 5)، فكم يبلغ الإيراد الحدي (MR)؟", "options": ["8", "5", "2", "-8"], "correct": 0, "hint": "MR = 10 × (1 - 1/5) = 10 × (1 - 0.2) = 10 × 0.8 = 8.", "explanation": "بتطبيق المعادلة MR = P[1 - (1/Ed)] في ص 8: MR = 10 × [1 - (1/5)] = 10 × 0.8 = 8."},
+            {"id": 99, "page": 14, "category": "مسألة تدريبية (عرض الصناعة)", "q": "في جدول عرض الصناعة (ص 14)، كم تبلغ الزيادة في العرض الكلي للصناعة في كل مرة يرتفع فيها سعر السلعة بمقدار (100) دينار؟", "options": ["تزداد بمقدار 100 وحدة دائماً", "تزداد بمقدار ثابت هو (250) وحدة في كل مرحلة (400 -> 650 -> 900 -> 1150 -> 1400 -> 1650)", "تتناقص بمقدار 250 وحدة", "تتضاعف هندسياً"], "correct": 1, "hint": "باوع عالأرقام: 400 صارت 650 (+250)، صارت 900 (+250)، صارت 1150 (+250)...", "explanation": "من قراءة العمود الأخير في جدول عرض الصناعة (ص 14)، نلاحظ أن العرض الكلي يزداد بمقدار 250 وحدة كلما ارتفع السعر 100 دينار (400، 650، 900، 1150، 1400، 1650)."},
+            {"id": 100, "page": 17, "category": "مسألة تدريبية (مرونة العرض)", "q": "تطبيقاً لقانون مرونة العرض (ص 16-17): إذا ارتفع سعر سلعة من (10) إلى (15) ديناراً، فازدادت الكمية المعروضة من (200) إلى (250) وحدة، فكم تبلغ مرونة العرض (Es) وما نوعها؟", "options": ["Es = 0.5 (عرض واطئ المرونة Es < 1)", "Es = 2.0 (عرض عالي المرونة Es > 1)", "Es = 1.0 (عرض متكافئ المرونة)", "Es = 0 (عديم المرونة)"], "correct": 0, "hint": "ΔQ = 50 ، و ΔP = 5.. اقسم (50/5) = 10، واضربها في (P1/Q1) يعني (10/200) تطلع 100/200 = 0.5.", "explanation": "بتطبيق معادلة ص 16-17: Es = (250-200)/(15-10) × (10/200) = (50/5) × (10/200) = 100/200 = 0.5، وبما أنها أقل من 1 فهو عرض واطئ المرونة (غير مرن)."}
+        ];
+
+        const FUNNY_CORRECT_REACTIONS = [
+            "عاشت ايدك يالذهب! مرونتك عالية وجوابك يوزن ذهب عيار 24 💰👏",
+            "كفو والله! منحنى العرض مالتك صاعد للسما هسة 📈🔥",
+            "عمي أنت قاري الملزمة لو مؤلفها؟ إيرادك الحدي فول اليوم! 😎✨",
+            "بالهدف! الجزء الأيمن على الجزء الأيسر يصفكولك على هالجواب 🎯👑",
+            "مضبوط 100%! إجابتك بزاوية 45 درجة متكافئة وما بيها أي غلطة 💵✅",
+            "لك عيني شهل فهامة! مشاريع الصناعة كلها بأمان دام انت موجود 🚀🇮🇶"
+        ];
+
+        const FUNNY_WRONG_REACTIONS = [
+            "ها خوية وين رايح؟ جفصت بالمرونة! اقرأ الشرح جوة 😅📉",
+            "لا يمعود! منحنى العرض مالتك انشمر لليسار S3 بهالجواب 😂🏭",
+            "بوري معدل! الإيراد الحدي مالتك طلع سالب 16.. شوف الشرح الصح 🚨😭",
+            "شبيك يمعود طفت يمك الوطنية؟ شوف ليش الجواب الصح يختلف 🔌😅",
+            "غلط خوية غلط! مرونتك صفر بهذا السؤال.. اقرأ التوضيح ❌📉"
+        ];
+
+        let activeQuestions = [];
+        let currentIndex = 0;
+        let userAnswers = {};
+        let instantFeedback = true;
+        let timerInterval = null;
+        let secondsElapsed = 0;
+        let soundEnabled = true;
+        let currentReviewFilter = 'all';
+        let currentReviewPage = 'all';
+        let showReviewExplanations = true;
+        let saveTimeout = null;
+
+        const STORAGE_KEY = 'quiz_state_p8_20_v2';
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        let audioCtx = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('quiz_theme');
+            if (savedTheme) {
+                setTheme(savedTheme, false);
+            } else {
+                setTheme('dark', false);
+            }
+
+            const savedState = localStorage.getItem(STORAGE_KEY);
+            if (savedState) {
+                const btnContainer = document.getElementById('setup-container');
+                const resumeBtn = document.createElement('button');
+                resumeBtn.className = 'w-full py-4 rounded-2xl bg-amber-500/15 text-amber-400 border border-amber-500/30 hover:bg-amber-500/25 text-lg font-black flex items-center justify-center gap-3 shadow-lg mb-4 transition-all';
+                resumeBtn.innerHTML = '<span>استئناف الاختبار السابق (محفوظ تلقائياً)</span><i class="fa-solid fa-clock-rotate-left"></i>';
+                resumeBtn.onclick = resumeQuiz;
+                btnContainer.insertBefore(resumeBtn, btnContainer.firstChild);
+            }
+
+            // Smooth Keyboard Shortcuts (1-4 for options, Arrows for navigation, H for hint)
+            document.addEventListener('keydown', (e) => {
+                if (!document.getElementById('view-quiz').classList.contains('active')) return;
+                if (['1', '2', '3', '4'].includes(e.key)) {
+                    selectOption(parseInt(e.key, 10) - 1);
+                } else if (e.key === 'ArrowLeft') {
+                    nextQuestion();
+                } else if (e.key === 'ArrowRight') {
+                    prevQuestion();
+                } else if (e.key.toLowerCase() === 'h') {
+                    toggleHint();
+                }
+            });
+        });
+
+        function playTone(type) {
+            if (!soundEnabled) return;
+            try {
+                if (!audioCtx) audioCtx = new AudioCtx();
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                const now = audioCtx.currentTime;
+                if (type === 'correct') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(523.25, now);
+                    osc.frequency.setValueAtTime(659.25, now + 0.07);
+                    osc.frequency.setValueAtTime(783.99, now + 0.14);
+                    gain.gain.setValueAtTime(0.11, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.32);
+                    osc.start(now);
+                    osc.stop(now + 0.32);
+                } else if (type === 'wrong') {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(280, now);
+                    osc.frequency.setValueAtTime(190, now + 0.11);
+                    gain.gain.setValueAtTime(0.13, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
+                    osc.start(now);
+                    osc.stop(now + 0.28);
+                } else if (type === 'click') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(460, now);
+                    gain.gain.setValueAtTime(0.04, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+                    osc.start(now);
+                    osc.stop(now + 0.05);
+                }
+            } catch (e) {}
+        }
+
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            const icon = document.getElementById('sound-icon');
+            icon.className = soundEnabled ? 'fa-solid fa-volume-high text-emerald-400' : 'fa-solid fa-volume-xmark text-rose-400';
+            if (soundEnabled) playTone('click');
+            scheduleSaveState();
+        }
+
+        function setTheme(themeName, withSound = true) {
+            document.documentElement.setAttribute('data-theme', themeName);
+            localStorage.setItem('quiz_theme', themeName);
+            const themes = ['dark', 'light', 'gold', 'cyber'];
+            themes.forEach(t => {
+                const btn = document.getElementById(`theme-${t}`);
+                if (!btn) return;
+                if (t === themeName) {
+                    btn.className = 'px-1.5 py-0.5 rounded text-[10px] font-bold transition-all bg-emerald-500/20 text-emerald-400 border border-emerald-500/30';
+                } else {
+                    btn.className = 'px-1.5 py-0.5 rounded text-[10px] font-bold transition-all text-muted hover:text-current';
+                }
+            });
+            if (withSound) playTone('click');
+        }
+
+        function switchWindow(windowId) {
+            document.querySelectorAll('.view-window').forEach(w => w.classList.remove('active'));
+            document.getElementById(windowId).classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function shuffleArray(arr) {
+            const copy = [...arr];
+            for (let i = copy.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [copy[i], copy[j]] = [copy[j], copy[i]];
+            }
+            return copy;
+        }
+
+        // Non-blocking debounced state save for zero UI lag during answering
+        function scheduleSaveState() {
+            if (activeQuestions.length === 0) return;
+            if (saveTimeout) clearTimeout(saveTimeout);
+            saveTimeout = setTimeout(() => {
+                try {
+                    const state = {
+                        activeQuestions,
+                        currentIndex,
+                        userAnswers,
+                        instantFeedback,
+                        secondsElapsed,
+                        soundEnabled
+                    };
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+                } catch (e) {}
+            }, 120);
+        }
+
+        function resumeQuiz() {
+            playTone('click');
+            try {
+                const state = JSON.parse(localStorage.getItem(STORAGE_KEY));
+                if (state && state.activeQuestions && state.activeQuestions.length > 0) {
+                    activeQuestions = state.activeQuestions;
+                    currentIndex = state.currentIndex || 0;
+                    userAnswers = state.userAnswers || {};
+                    instantFeedback = state.instantFeedback !== undefined ? state.instantFeedback : true;
+                    secondsElapsed = state.secondsElapsed || 0;
+                    soundEnabled = state.soundEnabled !== undefined ? state.soundEnabled : true;
+                    startTimerAndAutoSave();
+                    buildNavStrip();
+                    renderQuestion(false);
+                    updateLiveScore();
+                    switchWindow('view-quiz');
+                }
+            } catch (e) {}
+        }
+
+        function startTimerAndAutoSave() {
+            if (timerInterval) clearInterval(timerInterval);
+            updateTimerDisplay();
+            timerInterval = setInterval(() => {
+                secondsElapsed++;
+                updateTimerDisplay();
+                if (secondsElapsed % 10 === 0) scheduleSaveState();
+            }, 1000);
+        }
+
+        function startQuiz() {
+            playTone('click');
+            const doShuffleQ = document.getElementById('opt-shuffle-q').checked;
+            const doShuffleA = document.getElementById('opt-shuffle-a').checked;
+            instantFeedback = document.getElementById('opt-instant').checked;
+            const scope = document.getElementById('opt-scope').value;
+
+            let pool = JSON.parse(JSON.stringify(MASTER_QUESTIONS));
+            if (scope === 'p8-11') pool = pool.filter(q => q.page >= 8 && q.page <= 11);
+            else if (scope === 'p12-16') pool = pool.filter(q => q.page >= 12 && q.page <= 16);
+            else if (scope === 'p17-20') pool = pool.filter(q => q.page >= 17 && q.page <= 20);
+
+            if (doShuffleQ || scope === 'quick20' || scope === 'quick50') pool = shuffleArray(pool);
+            if (scope === 'quick20') pool = pool.slice(0, 20);
+            if (scope === 'quick50') pool = pool.slice(0, 50);
+
+            if (doShuffleA) {
+                pool.forEach(item => {
+                    const correctText = item.options[item.correct];
+                    item.options = shuffleArray(item.options);
+                    item.correct = item.options.indexOf(correctText);
+                });
+            }
+
+            activeQuestions = pool;
+            currentIndex = 0;
+            userAnswers = {};
+            secondsElapsed = 0;
+
+            startTimerAndAutoSave();
+            buildNavStrip();
+            renderQuestion(false);
+            updateLiveScore();
+            scheduleSaveState();
+            switchWindow('view-quiz');
+        }
+
+        function updateTimerDisplay() {
+            const mins = String(Math.floor(secondsElapsed / 60)).padStart(2, '0');
+            const secs = String(secondsElapsed % 60).padStart(2, '0');
+            document.getElementById('live-timer').textContent = `${mins}:${secs}`;
+        }
+
+        function buildNavStrip() {
+            const strip = document.getElementById('q-nav-strip');
+            const frag = document.createDocumentFragment();
+            activeQuestions.forEach((q, idx) => {
+                const btn = document.createElement('button');
+                btn.id = `nav-pill-${idx}`;
+                btn.onclick = () => jumpToQuestion(idx);
+                btn.className = 'w-8 h-8 rounded-lg text-xs font-bold shrink-0 transition-all flex items-center justify-center theme-secondary text-muted';
+                btn.textContent = idx + 1;
+                frag.appendChild(btn);
+            });
+            strip.innerHTML = '';
+            strip.appendChild(frag);
+        }
+
+        function updateSingleNavPill(idx, isCurrent = false) {
+            const btn = document.getElementById(`nav-pill-${idx}`);
+            if (!btn) return;
+            const q = activeQuestions[idx];
+            const ans = userAnswers[idx];
+
+            let base = 'w-8 h-8 rounded-lg text-xs font-bold shrink-0 transition-all flex items-center justify-center ';
+            if (isCurrent) base += 'ring-2 ring-amber-400 scale-105 ';
+
+            if (ans === undefined) {
+                btn.className = base + 'theme-secondary text-muted';
+            } else if (instantFeedback) {
+                if (ans === q.correct) btn.className = base + 'bg-emerald-500/25 text-emerald-400 border border-emerald-500/40';
+                else btn.className = base + 'bg-rose-500/25 text-rose-400 border border-rose-500/40';
+            } else {
+                btn.className = base + 'bg-sky-500/25 text-sky-400 border border-sky-500/40';
+            }
+        }
+
+        function updateNavStrip() {
+            activeQuestions.forEach((_, idx) => updateSingleNavPill(idx, idx === currentIndex));
+            const activePill = document.getElementById(`nav-pill-${currentIndex}`);
+            if (activePill) {
+                activePill.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            }
+        }
+
+        // Renders question when switching questions (NOT called on option click!)
+        function renderQuestion(animateSwap = true) {
+            const qCard = document.getElementById('question-card');
+            if (animateSwap) {
+                qCard.classList.remove('q-card-Swap');
+                void qCard.offsetWidth; // Reflow for clean animation restart
+                qCard.classList.add('q-card-Swap');
+
+                // Only scroll smoothly if the top of the question card is scrolled out of view
+                const rect = qCard.getBoundingClientRect();
+                if (rect.top < 55) {
+                    window.scrollTo({ top: Math.max(0, window.scrollY + rect.top - 68), behavior: 'smooth' });
+                }
+            }
+
+            const item = activeQuestions[currentIndex];
+            const total = activeQuestions.length;
+
+            document.getElementById('q-counter-badge').textContent = `سؤال ${currentIndex + 1} من ${total}`;
+            document.getElementById('q-page-text').textContent = `ملزمة ص ${item.page}`;
+            document.getElementById('q-inline-page').innerHTML = `<i class="fa-solid fa-bookmark"></i> ملزمة ص ${item.page}`;
+            document.getElementById('q-category-label').textContent = item.category;
+
+            const pct = Math.round(((currentIndex + 1) / total) * 100);
+            document.getElementById('quiz-progress-bar').style.width = `${pct}%`;
+
+            document.getElementById('q-text').innerHTML = `
+                <span class="inline-block px-2 py-0.5 rounded-md text-xs font-extrabold bg-amber-500/15 text-amber-400 border border-amber-500/30 ml-1.5 align-middle">ص ${item.page}</span>
+                <span>${item.q}</span>
+            `;
+
+            document.getElementById('hint-box').classList.remove('open');
+            document.getElementById('hint-text').textContent = item.hint;
+
+            const fbBox = document.getElementById('feedback-box');
+            fbBox.classList.remove('open');
+
+            const optContainer = document.getElementById('options-container');
+            optContainer.innerHTML = '';
+            const arabicLetters = ['أ', 'ب', 'ج', 'د'];
+            const existingAnswer = userAnswers[currentIndex];
+
+            item.options.forEach((optText, idx) => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.id = `opt-btn-${idx}`;
+                btn.onclick = () => selectOption(idx);
+
+                btn.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <span class="w-8 h-8 rounded-xl theme-card flex items-center justify-center text-xs font-black shrink-0">${arabicLetters[idx]}</span>
+                        <span class="leading-relaxed">${optText}</span>
+                    </div>
+                    <span id="opt-icon-${idx}" class="shrink-0"></span>
+                `;
+                optContainer.appendChild(btn);
+            });
+
+            applyOptionStylesInPlace();
+
+            if (existingAnswer !== undefined && instantFeedback) {
+                populateAndOpenFeedback(existingAnswer === item.correct, item, existingAnswer === -1, false);
+            }
+
+            const isLast = (currentIndex === total - 1);
+            document.getElementById('btn-prev').disabled = (currentIndex === 0);
+            document.getElementById('btn-next-label').textContent = isLast ? 'إنهاء وعرض النتيجة' : 'السؤال التالي';
+            document.getElementById('inline-next-label').textContent = isLast ? 'إنهاء وعرض النتيجة' : 'السؤال التالي';
+            updateNavStrip();
+        }
+
+        // Smooth In-Place Option Styling without destroying DOM buttons or jumping scroll
+        function applyOptionStylesInPlace() {
+            const item = activeQuestions[currentIndex];
+            const existingAnswer = userAnswers[currentIndex];
+
+            item.options.forEach((_, idx) => {
+                const btn = document.getElementById(`opt-btn-${idx}`);
+                const iconSpan = document.getElementById(`opt-icon-${idx}`);
+                if (!btn || !iconSpan) return;
+
+                let classes = 'option-item w-full text-right p-4 rounded-2xl flex items-center justify-between gap-3 font-bold text-sm sm:text-base ';
+                let statusIcon = '';
+
+                if (existingAnswer !== undefined) {
+                    if (instantFeedback) {
+                        classes += 'disabled cursor-default ';
+                        if (idx === item.correct) {
+                            classes += 'correct ';
+                            statusIcon = '<i class="fa-solid fa-circle-check text-emerald-400 text-lg"></i>';
+                        } else if (idx === existingAnswer && existingAnswer !== -1) {
+                            classes += 'wrong ';
+                            statusIcon = '<i class="fa-solid fa-circle-xmark text-rose-400 text-lg"></i>';
+                        }
+                    } else if (idx === existingAnswer && existingAnswer !== -1) {
+                        classes += 'selected ';
+                        statusIcon = '<i class="fa-solid fa-circle-dot text-emerald-400 text-lg"></i>';
+                    }
+                }
+
+                btn.className = classes;
+                iconSpan.innerHTML = statusIcon;
+            });
+        }
+
+        function toggleHint() {
+            playTone('click');
+            document.getElementById('hint-box').classList.toggle('open');
+        }
+
+        function revealExplanationDirectly() {
+            playTone('click');
+            const fbBox = document.getElementById('feedback-box');
+            if (fbBox.classList.contains('open') && userAnswers[currentIndex] !== undefined) {
+                fbBox.classList.remove('open');
+                return;
+            }
+
+            const item = activeQuestions[currentIndex];
+            if (userAnswers[currentIndex] === undefined) {
+                userAnswers[currentIndex] = -1;
+                updateLiveScore();
+                applyOptionStylesInPlace();
+                updateSingleNavPill(currentIndex, true);
+                populateAndOpenFeedback(false, item, true, true);
+                scheduleSaveState();
+                return;
+            }
+
+            const existingAnswer = userAnswers[currentIndex];
+            const isCorrect = (existingAnswer !== -1) && (existingAnswer === item.correct);
+            populateAndOpenFeedback(isCorrect, item, existingAnswer === -1, true);
+        }
+
+        function selectOption(optIdx) {
+            if (instantFeedback && userAnswers[currentIndex] !== undefined) return;
+            const item = activeQuestions[currentIndex];
+            userAnswers[currentIndex] = optIdx;
+
+            const isCorrect = (optIdx === item.correct);
+            if (instantFeedback) playTone(isCorrect ? 'correct' : 'wrong');
+            else playTone('click');
+
+            // Update in-place smoothly without scrolling to top or recreating DOM
+            applyOptionStylesInPlace();
+            updateLiveScore();
+            updateSingleNavPill(currentIndex, true);
+
+            if (instantFeedback) {
+                populateAndOpenFeedback(isCorrect, item, false, true);
+            }
+
+            scheduleSaveState();
+        }
+
+        function populateAndOpenFeedback(isCorrect, item, isRevealedWithoutAnswering, autoScrollIntoView = false) {
+            const fbBox = document.getElementById('feedback-box');
+            const fbCardInner = document.getElementById('feedback-card-inner');
+            const fbHeader = document.getElementById('feedback-header');
+            const fbIcon = document.getElementById('feedback-icon');
+            const fbText = document.getElementById('feedback-text');
+            const fbPage = document.getElementById('feedback-page-ref');
+            const fbCorrectAns = document.getElementById('feedback-correct-answer');
+            const fbExpTitle = document.getElementById('explanation-title');
+            const fbExpText = document.getElementById('feedback-explanation-text');
+            const arabicLetters = ['أ', 'ب', 'ج', 'د'];
+            const correctOptionFormatted = `(${arabicLetters[item.correct]}) ${item.options[item.correct]}`;
+
+            if (isRevealedWithoutAnswering) {
+                fbCardInner.className = 'rounded-2xl overflow-hidden theme-secondary border border-amber-500/40';
+                fbHeader.className = 'px-4 py-3 flex flex-wrap items-center justify-between gap-2 bg-amber-500/15 text-amber-300 border-b border-amber-500/25';
+                fbIcon.className = 'fa-solid fa-lightbulb text-xl text-amber-400';
+                fbText.textContent = 'كشفنالك الجواب الصحيح (تُحسب إجابة خاطئة) 📖👇';
+            } else if (isCorrect) {
+                fbCardInner.className = 'rounded-2xl overflow-hidden theme-secondary border border-emerald-500/40';
+                fbHeader.className = 'px-4 py-3 flex flex-wrap items-center justify-between gap-2 bg-emerald-500/15 text-emerald-300 border-b border-emerald-500/25';
+                fbIcon.className = 'fa-solid fa-face-grin-stars text-xl text-emerald-400';
+                fbText.textContent = FUNNY_CORRECT_REACTIONS[currentIndex % FUNNY_CORRECT_REACTIONS.length];
+            } else {
+                fbCardInner.className = 'rounded-2xl overflow-hidden theme-secondary border border-rose-500/40';
+                fbHeader.className = 'px-4 py-3 flex flex-wrap items-center justify-between gap-2 bg-rose-500/15 text-rose-300 border-b border-rose-500/25';
+                fbIcon.className = 'fa-solid fa-face-dizzy text-xl text-rose-400';
+                fbText.textContent = FUNNY_WRONG_REACTIONS[currentIndex % FUNNY_WRONG_REACTIONS.length];
+            }
+
+            fbPage.innerHTML = `<i class="fa-solid fa-file-lines"></i> ملزمة ص ${item.page}`;
+            fbCorrectAns.textContent = correctOptionFormatted;
+            fbExpTitle.textContent = `💡 ليش هذا الجواب هو الصح؟ (ص ${item.page}):`;
+            fbExpText.textContent = item.explanation;
+
+            requestAnimationFrame(() => {
+                fbBox.classList.add('open');
+                if (autoScrollIntoView) {
+                    setTimeout(() => {
+                        const rect = fbBox.getBoundingClientRect();
+                        if (rect.bottom > window.innerHeight) {
+                            fbBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                        }
+                    }, 160);
+                }
+            });
+        }
+
+        function updateLiveScore() {
+            let correctCount = 0;
+            let wrongCount = 0;
+            Object.keys(userAnswers).forEach(qIdx => {
+                const ans = userAnswers[qIdx];
+                const q = activeQuestions[qIdx];
+                if (!q) return;
+                if (ans === q.correct) correctCount++;
+                else if (ans === -1 || ans !== q.correct) wrongCount++;
+            });
+            document.getElementById('live-correct').textContent = correctCount;
+            document.getElementById('live-wrong').textContent = instantFeedback ? wrongCount : Object.keys(userAnswers).length;
+        }
+
+        function prevQuestion() {
+            if (currentIndex > 0) {
+                playTone('click');
+                currentIndex--;
+                scheduleSaveState();
+                renderQuestion(true);
+            }
+        }
+
+        function nextQuestion() {
+            playTone('click');
+            if (currentIndex < activeQuestions.length - 1) {
+                currentIndex++;
+                scheduleSaveState();
+                renderQuestion(true);
+            } else {
+                finishQuiz();
+            }
+        }
+
+        function jumpToQuestion(idx) {
+            if (idx === currentIndex) return;
+            playTone('click');
+            currentIndex = idx;
+            scheduleSaveState();
+            renderQuestion(true);
+        }
+
+        function finishQuiz() {
+            const total = activeQuestions.length;
+            const answeredCount = Object.keys(userAnswers).length;
+            
+            if (answeredCount < total) {
+                const confirmFinish = confirm(`لكيتك مجاوب بس ${answeredCount} من أصل ${total} سؤال! متأكد تريد تسلم الدفتر؟ (الأسئلة الباقية تنحسب غلط)`);
+                if (!confirmFinish) return;
+            }
+
+            if (timerInterval) clearInterval(timerInterval);
+            playTone('correct');
+
+            let correct = 0;
+            const pageStats = {};
+
+            activeQuestions.forEach((q, idx) => {
+                if (!pageStats[q.page]) pageStats[q.page] = { total: 0, correct: 0 };
+                pageStats[q.page].total++;
+                if (userAnswers[idx] === q.correct) {
+                    correct++;
+                    pageStats[q.page].correct++;
+                }
+            });
+
+            const wrongOrSkipped = total - correct;
+            const percent = Math.round((correct / total) * 100);
+
+            document.getElementById('res-percent').textContent = `${percent}%`;
+            document.getElementById('res-correct').textContent = `${correct} / ${total}`;
+            document.getElementById('res-wrong').textContent = wrongOrSkipped;
+            document.getElementById('res-time').textContent = document.getElementById('live-timer').textContent;
+
+            const emojiEl = document.getElementById('rank-emoji');
+            const titleEl = document.getElementById('rank-title');
+            const descEl = document.getElementById('rank-desc');
+
+            if (percent >= 90) {
+                emojiEl.textContent = '📈👑';
+                titleEl.textContent = 'بروفيسور المرونة ونظرية العرض';
+                descEl.textContent = 'ختمت الملزمة من ص 8 لحد ص 20! مرونة القوس والنقطة وعرض الصناعة كلها بجيبك الصغير!';
+            } else if (percent >= 75) {
+                emojiEl.textContent = '🏭🔥';
+                titleEl.textContent = 'مؤسس كارتل صناعي محترف';
+                descEl.textContent = 'مسيطر عالعرض والمرونات! بس رادلك نظرة خفيفة عالأخطاء وشرحها حتى تقفل الـ 100%.';
+            } else if (percent >= 50) {
+                emojiEl.textContent = '📊😅';
+                titleEl.textContent = 'منتج بالأجل القصير يحاول يواكب السوك';
+                descEl.textContent = 'ناجح عالحافة! يرادلك تراجع شرح الإجابات الصحيحة وتشوف وين خطأت بقوانين المرونة.';
+            } else if (percent >= 25) {
+                emojiEl.textContent = '📉🌾';
+                titleEl.textContent = 'منحنى عرض متراجع لليسار (S3)';
+                descEl.textContent = 'خوية إمكانات العرض مالتك متراجعة! الحك على روحك وافتح مراجعة الأجوبة والشرح جوة قبل الامتحان.';
+            } else {
+                emojiEl.textContent = '💸😭';
+                titleEl.textContent = 'عرض عديم المرونة (Es = 0)';
+                descEl.textContent = 'كلشي ما قاري يمعود! فوت على مراجعة الإجابات واقرأ الشرح سؤال سؤال!';
+            }
+
+            const grid = document.getElementById('page-breakdown-grid');
+            grid.innerHTML = '';
+            Object.keys(pageStats).sort((a, b) => Number(a) - Number(b)).forEach(p => {
+                const st = pageStats[p];
+                const pPct = Math.round((st.correct / st.total) * 100);
+                const badgeColor = pPct >= 75 ? 'text-emerald-400' : (pPct >= 50 ? 'text-amber-400' : 'text-rose-400');
+                const card = document.createElement('div');
+                card.className = 'theme-card rounded-xl p-2.5 flex items-center justify-between';
+                card.innerHTML = `<span class="font-bold">ملزمة ص ${p}</span><span class="font-black ${badgeColor}">${st.correct}/${st.total} (${pPct}%)</span>`;
+                grid.appendChild(card);
+            });
+
+            localStorage.removeItem(STORAGE_KEY);
+            switchWindow('view-results');
+        }
+
+        function openReviewWindow(filterType) {
+            playTone('click');
+            currentReviewFilter = filterType || 'all';
+            currentReviewPage = 'all';
+            document.getElementById('rev-page-select').value = 'all';
+            renderReviewList();
+            switchWindow('view-review');
+        }
+
+        function toggleAllReviewExplanations() {
+            playTone('click');
+            showReviewExplanations = !showReviewExplanations;
+            document.getElementById('toggle-rev-exp-text').textContent = showReviewExplanations ? 'إخفاء الشرح' : 'إظهار الشرح';
+            renderReviewList();
+        }
+
+        function filterReview(type) { playTone('click'); currentReviewFilter = type; renderReviewList(); }
+        function filterReviewByPage(pageVal) { playTone('click'); currentReviewPage = pageVal; renderReviewList(); }
+
+        function renderReviewList() {
+            const container = document.getElementById('review-list-container');
+            container.innerHTML = '';
+            let totalCount = activeQuestions.length;
+            let correctCount = 0;
+            let wrongCount = 0;
+            activeQuestions.forEach((q, idx) => {
+                if (userAnswers[idx] === q.correct) correctCount++;
+                else wrongCount++;
+            });
+            document.getElementById('count-all').textContent = totalCount;
+            document.getElementById('count-correct').textContent = correctCount;
+            document.getElementById('count-wrong').textContent = wrongCount;
+
+            ['all', 'correct', 'wrong'].forEach(t => {
+                document.getElementById(`rev-filter-${t}`).className = (t === currentReviewFilter)
+                    ? 'px-2 py-1 rounded-lg text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 shrink-0'
+                    : 'px-2 py-1 rounded-lg text-[10px] font-bold theme-secondary text-muted shrink-0';
+            });
+
+            const arabicLetters = ['أ', 'ب', 'ج', 'د'];
+            let shownCount = 0;
+            const frag = document.createDocumentFragment();
+
+            activeQuestions.forEach((q, idx) => {
+                const uAns = userAnswers[idx];
+                const isCorrect = (uAns === q.correct);
+                if (currentReviewFilter === 'correct' && !isCorrect) return;
+                if (currentReviewFilter === 'wrong' && isCorrect) return;
+                if (currentReviewPage !== 'all' && String(q.page) !== String(currentReviewPage)) return;
+
+                shownCount++;
+                const card = document.createElement('div');
+                card.className = 'theme-card rounded-2xl p-5 border-r-4 ' + (isCorrect ? 'border-r-emerald-500' : 'border-r-rose-500');
+
+                let statusBadge = '';
+                if (isCorrect) statusBadge = '<span class="px-2.5 py-1 rounded-lg text-xs font-bold bg-emerald-500/20 text-emerald-400"><i class="fa-solid fa-check ml-1"></i>إجابتك صحيحة</span>';
+                else if (uAns === -1) statusBadge = '<span class="px-2.5 py-1 rounded-lg text-xs font-bold bg-rose-500/20 text-rose-400"><i class="fa-solid fa-eye ml-1"></i>تم كشف الحل (خطأ)</span>';
+                else if (uAns === undefined) statusBadge = '<span class="px-2.5 py-1 rounded-lg text-xs font-bold bg-amber-500/20 text-amber-400"><i class="fa-solid fa-minus ml-1"></i>متروك بدون حل</span>';
+                else statusBadge = '<span class="px-2.5 py-1 rounded-lg text-xs font-bold bg-rose-500/20 text-rose-400"><i class="fa-solid fa-xmark ml-1"></i>إجابتك خاطئة</span>';
+
+                let optionsHtml = '';
+                q.options.forEach((opt, oIdx) => {
+                    let optStyle = 'theme-secondary text-muted opacity-80';
+                    let badge = '';
+                    if (oIdx === q.correct) {
+                        optStyle = 'bg-emerald-500/15 border border-emerald-500/40 text-emerald-300 font-bold';
+                        badge = '<span class="text-xs font-extrabold text-emerald-400 shrink-0"><i class="fa-solid fa-circle-check ml-1"></i>الجواب الصحيح</span>';
+                    } else if (oIdx === uAns && !isCorrect && uAns !== -1) {
+                        optStyle = 'bg-rose-500/15 border border-rose-500/40 text-rose-300 font-bold';
+                        badge = '<span class="text-xs font-extrabold text-rose-400 shrink-0"><i class="fa-solid fa-circle-xmark ml-1"></i>اختيارك</span>';
+                    }
+                    optionsHtml += `<div class="p-3 rounded-xl flex items-center justify-between gap-2 text-xs sm:text-sm ${optStyle}"><div class="flex items-center gap-2"><span class="font-black">${arabicLetters[oIdx]})</span><span>${opt}</span></div>${badge}</div>`;
+                });
+
+                const explanationBlockHtml = showReviewExplanations ? `<div class="mt-3 space-y-2"><div class="rounded-xl explanation-card px-4 py-3 text-xs sm:text-sm flex items-start gap-2.5"><i class="fa-solid fa-book-open-reader text-emerald-400 mt-1 text-base shrink-0"></i><div><span class="font-black text-emerald-400 block mb-1">📖 شرح الإجابة الصحيحة (ملزمة ص ${q.page}):</span><p class="leading-relaxed">${q.explanation}</p></div></div><div class="rounded-xl bg-amber-500/10 border border-amber-500/25 px-3.5 py-2 text-xs text-amber-300 flex items-center gap-2"><i class="fa-solid fa-wand-magic-sparkles text-amber-400 shrink-0"></i><div><span class="font-bold">تغشيشة سريعة للحفظ: </span><span>${q.hint}</span></div></div></div>` : '';
+
+                card.innerHTML = `<div class="flex flex-wrap items-center justify-between gap-2 mb-3"><div class="flex items-center gap-2"><span class="px-2.5 py-1 rounded-lg theme-secondary text-xs font-black">سؤال #${idx + 1}</span><span class="page-badge"><i class="fa-solid fa-file-lines"></i> ص ${q.page}</span><span class="text-xs text-muted font-bold">${q.category}</span></div>${statusBadge}</div><h3 class="font-extrabold text-base sm:text-lg mb-3 leading-relaxed">${q.q}</h3><div class="space-y-2">${optionsHtml}</div>${explanationBlockHtml}`;
+                frag.appendChild(card);
+            });
+
+            if (shownCount === 0) {
+                container.innerHTML = `<div class="theme-card rounded-2xl p-8 text-center text-muted"><i class="fa-solid fa-box-open text-3xl mb-2 text-amber-400"></i><p class="font-bold">ماكو أسئلة تطابق هذا الفلتر حالياً! جرب تختار "الكل".</p></div>`;
+            } else {
+                container.appendChild(frag);
+            }
+        }
+    </script>
+</body>
+</html>
